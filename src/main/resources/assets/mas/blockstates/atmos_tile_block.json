@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "mas:block/atmos_tile_block"
+    }
+  }
+}
