@@ -29,7 +29,6 @@ public class GasAnalyzer extends Item {
         } else if(!level.getBlockState(blockpos).is(ATMOS_TILE_BLOCK)) {
             return super.useOn(context);
         } else {
-            //CompoundTag tag = level.getBlockEntity(blockpos).getPersistentData();
             player.displayClientMessage(Component.literal("FUCK"), false);
             return InteractionResult.SUCCESS;
         }
