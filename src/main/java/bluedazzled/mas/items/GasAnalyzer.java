@@ -1,29 +1,21 @@
 package bluedazzled.mas.items;
 
+import bluedazzled.mas.blocks.AtmosTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.TagType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.ProblemReporter;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
 
 import static bluedazzled.mas.Registration.*;
 
@@ -36,23 +28,25 @@ public class GasAnalyzer extends Item {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        Player player = context.getPlayer();
-        BlockPos blockpos = context.getClickedPos();
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
-        BlockEntity blockent = level.getBlockEntity(blockpos);
-        BlockState state = level.getBlockState(blockpos);
-
-        if (!level.isClientSide) {
-            return InteractionResult.SUCCESS;
-        } else if(!state.is(ATMOS_TILE_BLOCK)) {
-            return super.useOn(context);
-        } else {
-            CompoundTag nbt = blockent.saveWithoutMetadata(level.registryAccess());
-            CompoundTag tileInfo = nbt.getCompound("tileInfo");
-
-            player.displayClientMessage(Component.literal(Double.toString(tileInfo.getDouble("temperature"))), false);
+        if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
+        Player player = context.getPlayer();
+        BlockPos blockpos = context.getClickedPos();
+        BlockState state = level.getBlockState(blockpos);
+        if(!state.is(ATMOS_TILE_BLOCK)) {
+            return super.useOn(context);
+        }
+        BlockEntity blockent = level.getBlockEntity(blockpos);
+        if (!(blockent instanceof AtmosTileEntity atmosTile)) {
+            return InteractionResult.PASS;
+        }
+        CompoundTag tileInfo = atmosTile.getTileInfo(level);
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.sendSystemMessage(Component.literal(Double.toString(tileInfo.getDouble("temperature"))));
+        }
+        return InteractionResult.SUCCESS;
     }
 }

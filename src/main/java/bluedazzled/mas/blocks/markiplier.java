@@ -12,7 +12,11 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class markiplier extends Block {
     public markiplier() {
         super(BlockBehaviour.Properties.of()
@@ -21,6 +25,7 @@ public class markiplier extends Block {
                 .sound(SoundType.METAL));
 
     }
+    @NotNull
     @Override
     public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         if (!level.isClientSide) {
