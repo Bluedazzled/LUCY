@@ -1,4 +1,4 @@
-package bluedazzled.mas.blocks;
+package bluedazzled.lucy_atmos.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static bluedazzled.mas.Registration.*;
+import static bluedazzled.lucy_atmos.Registration.*;
 
 @ParametersAreNonnullByDefault
 public class AtmosTileEntity extends BlockEntity {

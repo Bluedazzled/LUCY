@@ -1,6 +1,6 @@
-package bluedazzled.mas.items;
+package bluedazzled.lucy_atmos.items;
 
-import bluedazzled.mas.blocks.AtmosTileEntity;
+import bluedazzled.lucy_atmos.blocks.AtmosTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -17,13 +17,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-import static bluedazzled.mas.Registration.*;
+import static bluedazzled.lucy_atmos.Registration.*;
 
 public class GasAnalyzer extends Item {
     CompoundTag lastScannedTile;
     public GasAnalyzer() {
         super(new Properties()
-                .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("mas", "gas_analyzer")))
+                .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("lucy_atmos", "gas_analyzer")))
         );
     }
 

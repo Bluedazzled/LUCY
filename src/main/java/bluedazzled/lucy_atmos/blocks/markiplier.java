@@ -1,4 +1,4 @@
-package bluedazzled.mas.blocks;
+package bluedazzled.lucy_atmos.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
