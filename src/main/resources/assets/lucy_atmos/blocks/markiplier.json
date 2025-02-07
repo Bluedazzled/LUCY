@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "mas:block/markiplier"
+    "model": "lucy_atmos:block/markiplier"
   }
 }

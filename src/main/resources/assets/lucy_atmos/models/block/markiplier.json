@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures" : {
-    "all" : "mas:block/markiplier"
+    "all" : "lucy_atmos:block/markiplier"
   }
 }

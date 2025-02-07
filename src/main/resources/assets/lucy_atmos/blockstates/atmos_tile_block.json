@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "lucy_atmos:block/atmos_tile_block"
+    }
+  }
+}

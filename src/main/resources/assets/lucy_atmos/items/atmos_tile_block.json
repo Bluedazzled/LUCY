@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "mas:block/atmos_tile_block"
+    "model": "lucy_atmos:block/atmos_tile_block"
   }
 }

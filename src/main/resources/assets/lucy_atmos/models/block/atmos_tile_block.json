@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures" : {
-    "all" : "mas:block/atmos_tile_block"
+    "all" : "lucy_atmos:block/atmos_tile_block"
   }
 }

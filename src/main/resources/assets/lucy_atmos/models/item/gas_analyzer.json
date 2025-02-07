@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures" : {
-    "layer0": "mas:item/gas_analyzer"
+    "layer0": "lucy_atmos:item/gas_analyzer"
   }
 }

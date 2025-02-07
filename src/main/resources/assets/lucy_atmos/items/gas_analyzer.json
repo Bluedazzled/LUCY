@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "mas:item/gas_analyzer"
+    "model": "lucy_atmos:item/gas_analyzer"
   }
 }
