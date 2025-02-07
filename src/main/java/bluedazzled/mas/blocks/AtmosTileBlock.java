@@ -27,11 +27,5 @@ public class AtmosTileBlock extends Block implements EntityBlock {
         return new AtmosTileEntity(pos, state);
     }
 
-    @Override
-    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result){
-        if(!level.isClientSide) {
 
-        }
-        return InteractionResult.SUCCESS;
-    }
 }
