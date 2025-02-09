@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import static bluedazzled.lucy_atmos.Registration.*;
 
 public class GasAnalyzer extends Item {
-    CompoundTag lastScannedTile;
     public GasAnalyzer() {
         super(new Properties()
                 .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("lucy_atmos", "gas_analyzer")))
@@ -43,9 +42,16 @@ public class GasAnalyzer extends Item {
         if (!(blockent instanceof AtmosTileEntity atmosTile)) {
             return InteractionResult.PASS;
         }
-        CompoundTag tileInfo = atmosTile.getTileInfo(level);
+        CompoundTag gasMix = atmosTile.getGasMix();
+        CompoundTag gasses = gasMix.getCompound("gasses");
+
         if (player instanceof ServerPlayer serverPlayer) {
-            serverPlayer.sendSystemMessage(Component.literal(Double.toString(tileInfo.getDouble("temperature"))));
+            serverPlayer.sendSystemMessage(Component.literal("temperature: " + gasMix.getDouble("temperature") + "K"));
+            serverPlayer.sendSystemMessage(Component.literal("total moles: " + gasMix.getDouble("totalMoles")));
+            serverPlayer.sendSystemMessage(Component.literal("pressure: " + gasMix.getDouble("pressure") + "kPa"));
+            for (String key : gasses.getAllKeys()) {
+                serverPlayer.sendSystemMessage(Component.literal(key + ": " + gasses.getDouble(key) + " moles"));
+            }
         }
         return InteractionResult.SUCCESS;
     }
