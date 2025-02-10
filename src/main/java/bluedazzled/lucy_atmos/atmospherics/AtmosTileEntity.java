@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static bluedazzled.lucy_atmos.atmospherics.GasConstants.*;
+import static bluedazzled.lucy_atmos.atmospherics.gas.GasConstants.*;
 import static bluedazzled.lucy_atmos.Registration.*;
 
 @ParametersAreNonnullByDefault
@@ -68,14 +68,6 @@ public class AtmosTileEntity extends BlockEntity {
         total = Math.round(total * 1000.0) / 1000.0;
         this.gasMix.putDouble("totalMoles", total);
         setChanged();
-    }
-
-    public void setPlasmaOpacity(float opacity) {
-        this.plasmaOpacity = opacity;
-    }
-
-    public float getPlasmaOpacity(){
-        return plasmaOpacity;
     }
 
     @Override
