@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static bluedazzled.lucy_atmos.GasConstants.*;
+import static bluedazzled.lucy_atmos.atmospherics.GasConstants.*;
 import static bluedazzled.lucy_atmos.Registration.*;
 
 @ParametersAreNonnullByDefault
@@ -33,11 +33,10 @@ public class AtmosTileEntity extends BlockEntity {
 
         this.temperature = T20C;
         this.gasMix.putDouble("temperature", this.temperature);
-        this.gasMix.putInt("volume", TILE_VOLUME);
+        this.gasMix.putDouble("volume", TILE_VOLUME);
         //Default molar values of uhh 1m^3 of aaiirrrrrr
-        this.gasses.putDouble("oxygen", 8.73);
-        this.gasses.putDouble("nitrogen", 32.84);
-        this.gasses.putDouble("plasma", 12);
+        this.gasses.putDouble("oxygen", MOLES_O2STANDARD);
+        this.gasses.putDouble("nitrogen", MOLES_N2STANDARD);
         this.gasMix.put("gasses", this.gasses);
         updateTotalMoles();
         updatePressure();
