@@ -1,9 +1,8 @@
-package bluedazzled.lucy_atmos.blocks;
+package bluedazzled.lucy_atmos.atmospherics;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -20,7 +19,9 @@ public class AtmosTileEntity extends BlockEntity {
 
     public int pressure_difference;
     public int pressure_direction;
-    public boolean active;
+    public boolean active = false;
+
+    public float plasmaOpacity;
 
     public CompoundTag tileInfo;
 
@@ -36,10 +37,11 @@ public class AtmosTileEntity extends BlockEntity {
         //Default molar values of uhh 1m^3 of aaiirrrrrr
         this.gasses.putDouble("oxygen", 8.73);
         this.gasses.putDouble("nitrogen", 32.84);
+        this.gasses.putDouble("plasma", 12);
         this.gasMix.put("gasses", this.gasses);
         updateTotalMoles();
         updatePressure();
-
+        this.tileInfo.putBoolean("active", this.active);
         this.tileInfo.put("gasMix", this.gasMix);
         setChanged();
     }
@@ -54,7 +56,7 @@ public class AtmosTileEntity extends BlockEntity {
         int volume = this.gasMix.getInt("volume");  // Get volume
         double pressure = (totalMoles * GAS_CONSTANT * temperature) / volume;
 
-        pressure = Math.round(pressure * 1000.0) / 1000.0; //See updateTotalMoles()
+        pressure = Math.round(pressure * 1000.0) / 1000.0;
         this.gasMix.putDouble("pressure", pressure);
         setChanged();
     }
@@ -70,16 +72,24 @@ public class AtmosTileEntity extends BlockEntity {
         setChanged();
     }
 
+    public void setPlasmaOpacity(float opacity) {
+        this.plasmaOpacity = opacity;
+    }
+
+    public float getPlasmaOpacity(){
+        return plasmaOpacity;
+    }
+
     @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        this.gasMix = tag.getCompound("gasMix");
+        this.tileInfo = tag.getCompound("tileInfo");
     }
 
     @Override
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        tag.put("gasMix", this.gasMix);
+        tag.put("tileInfo", this.tileInfo);
     }
 }
 

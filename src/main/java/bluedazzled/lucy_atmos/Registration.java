@@ -1,16 +1,24 @@
 package bluedazzled.lucy_atmos;
 
+import bluedazzled.lucy_atmos.atmospherics.OverlayRenderer;
 import bluedazzled.lucy_atmos.blocks.markiplier;
 import bluedazzled.lucy_atmos.blocks.AtmosTileBlock;
-import bluedazzled.lucy_atmos.blocks.AtmosTileEntity;
+import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
 import bluedazzled.lucy_atmos.items.GasAnalyzer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -52,6 +60,13 @@ public class Registration {
             )
     );
 
+    @SubscribeEvent
+    private static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(
+                Registration.ATMOS_TILE_ENTITY.get(),
+                OverlayRenderer::new
+        );
+    }
 
     public static void init(IEventBus modEventBus) {
         BLOCKS.register(modEventBus);
