@@ -5,6 +5,7 @@ import bluedazzled.lucy_atmos.Registration;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -28,7 +29,7 @@ public class lucy_atmos {
         BlockEntityRenderers.register(Registration.ATMOS_TILE_ENTITY.get(), OverlayRenderer::new);
 
     }
-    private void registerAtlas(final RegisterMaterialAtlasesEvent event) {
-        event.register(ResourceLocation.fromNamespaceAndPath("lucy_atmos", "textures/atlas/gasoverlays"), ResourceLocation.fromNamespaceAndPath("lucy_atmos", "gasoverlays"));
+    public void registerAtlas(final RegisterMaterialAtlasesEvent event) {
+        event.register(ResourceLocation.fromNamespaceAndPath("lucy_atmos", "textures/atlas/gasoverlays.png"), ResourceLocation.fromNamespaceAndPath("lucy_atmos", "gasoverlays"));
     }
 }

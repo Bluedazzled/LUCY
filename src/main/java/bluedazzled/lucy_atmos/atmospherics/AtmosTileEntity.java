@@ -34,7 +34,6 @@ public class AtmosTileEntity extends BlockEntity {
         this.temperature = T20C;
         this.gasMix.putDouble("temperature", this.temperature);
         this.gasMix.putDouble("volume", TILE_VOLUME);
-        //Default molar values of uhh 1m^3 of aaiirrrrrr
         this.gasses.putDouble("oxygen", MOLES_O2STANDARD);
         this.gasses.putDouble("nitrogen", MOLES_N2STANDARD);
         this.gasMix.put("gasses", this.gasses);
