@@ -3,8 +3,16 @@ package bluedazzled.lucy_atmos.atmospherics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -14,14 +22,11 @@ import static bluedazzled.lucy_atmos.Registration.*;
 @ParametersAreNonnullByDefault
 public class AtmosTileEntity extends BlockEntity {
     public CompoundTag gasses;
-    public double temperature;
     public CompoundTag gasMix;
 
     public int pressure_difference;
     public int pressure_direction;
     public boolean active = false;
-
-    public float plasmaOpacity;
 
     public CompoundTag tileInfo;
 
@@ -31,21 +36,53 @@ public class AtmosTileEntity extends BlockEntity {
         this.gasses = new CompoundTag();
         this.tileInfo = new CompoundTag();
 
-        this.temperature = T20C;
-        this.gasMix.putDouble("temperature", this.temperature);
+        setTemperature(T20C);
         this.gasMix.putDouble("volume", TILE_VOLUME);
-        this.gasses.putDouble("oxygen", MOLES_O2STANDARD);
-        this.gasses.putDouble("nitrogen", MOLES_N2STANDARD);
-        this.gasMix.put("gasses", this.gasses);
-        updateTotalMoles();
-        updatePressure();
-        this.tileInfo.putBoolean("active", this.active);
-        this.tileInfo.put("gasMix", this.gasMix);
-        setChanged();
+        addGas("oxygen", MOLES_O2STANDARD);
+        addGas("nitrogen", MOLES_N2STANDARD);
+        setActive(false);
     }
 
     public CompoundTag getGasMix() {
         return this.gasMix;
+    }
+
+    public void updateAll() {
+        this.gasMix.put("gasses", this.gasses);
+        updateTotalMoles();
+        updatePressure();
+        this.tileInfo.put("gasMix", this.gasMix);
+        setChanged();
+    }
+
+    public void setTemperature(double temperature) {
+        this.gasMix.putDouble("temperature", Math.max(temperature, TCMB));
+        updateAll();
+    }
+
+    public void clearGasses() { //Why would anyone want this? At all?
+        this.gasMix.remove("gasses");
+        this.gasses = new CompoundTag();
+        updateAll();
+    }
+    public void addGas(String key, double moles) {
+        this.gasses.putDouble(key, moles);
+        updateAll();
+    }
+    public void setGasMoles(String key, double moles) {
+        this.gasses.putDouble(key, moles);
+        updateAll();
+    }
+    public void removeGas(String key) {
+        this.gasses.remove(key);
+        updateAll();
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    public boolean getActive() {
+        return this.active;
     }
 
     public void updatePressure() {
@@ -68,14 +105,6 @@ public class AtmosTileEntity extends BlockEntity {
         total = Math.round(total * 1000.0) / 1000.0;
         this.gasMix.putDouble("totalMoles", total);
         setChanged();
-    }
-
-    public void setPlasmaOpacity(float opacity) {
-        this.plasmaOpacity = opacity;
-    }
-
-    public float getPlasmaOpacity(){
-        return plasmaOpacity;
     }
 
     @Override
