@@ -42,12 +42,12 @@ public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> { /
         int opacity = 128;
 
         //I just want to preface this by saying this shit is jank and I'm sorry but I can't think of another way of doing this
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.UP,opacity);
+        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.UP, opacity);
         renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.DOWN, opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.NORTH,opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.SOUTH,opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.EAST,opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.WEST,opacity);
+        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.NORTH, opacity);
+        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.SOUTH, opacity);
+        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.EAST, opacity);
+        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.WEST, opacity);
         poseStack.popPose();
     }
 
