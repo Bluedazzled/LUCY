@@ -49,9 +49,9 @@ public class AtmosTileEntity extends BlockEntity {
     }
 
     public void updatePressure() {
-        double totalMoles = this.gasMix.getDouble("totalMoles");  // Get total moles of gas
-        double temperature = this.gasMix.getDouble("temperature"); // Get temperature
-        int volume = this.gasMix.getInt("volume");  // Get volume
+        double totalMoles = this.gasMix.getDouble("totalMoles");
+        double temperature = this.gasMix.getDouble("temperature");
+        int volume = this.gasMix.getInt("volume");
         double pressure = (totalMoles * GAS_CONSTANT * temperature) / volume;
 
         pressure = Math.round(pressure * 1000.0) / 1000.0;
