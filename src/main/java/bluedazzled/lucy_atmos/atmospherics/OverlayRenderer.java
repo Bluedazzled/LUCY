@@ -20,10 +20,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 
+import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
+
 
 public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> { //Blockstates are a work of art. This. This is bullshit.
     public OverlayRenderer(BlockEntityRendererProvider.Context context) {}
-    private static final ResourceLocation PLASMA_OVERLAY = ResourceLocation.fromNamespaceAndPath("lucy_atmos", "gasoverlay/plasma");
+    private static final ResourceLocation PLASMA_OVERLAY = ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlay/plasma");
 
 
     // This method is called every frame in order to render the block entity. Parameters are:
@@ -35,7 +37,7 @@ public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> { /
     // - packedOverlay: The current overlay value of the block entity, usually OverlayTexture.NO_OVERLAY.
     @Override
     public void render(AtmosTileEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-        VertexConsumer buffer = bufferSource.getBuffer(RenderType.text(ResourceLocation.fromNamespaceAndPath("lucy_atmos", "textures/atlas/gasoverlays.png")));
+        VertexConsumer buffer = bufferSource.getBuffer(RenderType.text(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png")));
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
         float scale = 0.5f;
@@ -52,7 +54,7 @@ public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> { /
     }
 
     private void renderQuad(PoseStack poseStack, VertexConsumer buffer, float scale, ResourceLocation texture, Direction direction, int opacity) {
-        TextureAtlasSprite sprite = Minecraft.getInstance().getModelManager().getAtlas(ResourceLocation.fromNamespaceAndPath("lucy_atmos", "textures/atlas/gasoverlays.png")).getSprite(texture);
+        TextureAtlasSprite sprite = Minecraft.getInstance().getModelManager().getAtlas(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png")).getSprite(texture);
 
         int b1 = LightTexture.FULL_BRIGHT >> 16 & 65535;
         int b2 = LightTexture.FULL_BRIGHT & 65535;

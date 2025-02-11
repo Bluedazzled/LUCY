@@ -8,6 +8,7 @@ import bluedazzled.lucy_atmos.items.GasAnalyzer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -20,12 +21,14 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
+import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
+
 public class Registration {
 
-    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(lucy_atmos.MODID);
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(lucy_atmos.MODID);
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
-            DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, lucy_atmos.MODID);
+            DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MODID);
 
     public static final DeferredItem<GasAnalyzer> GAS_ANALYZER = ITEMS.register("gas_analyzer", GasAnalyzer::new);
 
@@ -36,14 +39,14 @@ public class Registration {
             () -> new BlockItem(MARKIPLIER.get(),
                     new Item.Properties()
                             .useBlockDescriptionPrefix()
-                            .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("lucy_atmos", "markiplier")))
+                            .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MODID, "markiplier")))
                 )
             );
     public static final DeferredItem<Item> ATMOS_TILE_BLOCK_ITEM = ITEMS.register("atmos_tile_block",
             () -> new BlockItem(ATMOS_TILE_BLOCK.get(),
                     new Item.Properties()
                             .useBlockDescriptionPrefix()
-                            .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("lucy_atmos", "atmos_tile_block")))
+                            .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MODID, "atmos_tile_block")))
                 )
             );
 

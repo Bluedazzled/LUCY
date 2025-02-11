@@ -1,6 +1,7 @@
 package bluedazzled.lucy_atmos.items;
 
 import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -15,19 +16,20 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import static bluedazzled.lucy_atmos.Registration.*;
+import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
+@MethodsReturnNonnullByDefault
 public class GasAnalyzer extends Item {
     public GasAnalyzer() {
         super(new Properties()
-                .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("lucy_atmos", "gas_analyzer")))
+                .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MODID, "gas_analyzer")))
         );
     }
 
     @Override
-    public @NotNull InteractionResult useOn(UseOnContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
@@ -42,6 +44,10 @@ public class GasAnalyzer extends Item {
         if (!(blockent instanceof AtmosTileEntity atmosTile)) {
             return InteractionResult.PASS;
         }
+        if (player.isCrouching() && player.hasPermissions(2)) {
+            //open menu
+        }
+
         CompoundTag gasMix = atmosTile.getGasMix();
         CompoundTag gasses = gasMix.getCompound("gasses");
 
@@ -55,4 +61,6 @@ public class GasAnalyzer extends Item {
         }
         return InteractionResult.SUCCESS;
     }
+
+
 }

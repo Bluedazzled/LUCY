@@ -30,6 +30,6 @@ public class lucy_atmos {
 
     }
     public void registerAtlas(final RegisterMaterialAtlasesEvent event) {
-        event.register(ResourceLocation.fromNamespaceAndPath("lucy_atmos", "textures/atlas/gasoverlays.png"), ResourceLocation.fromNamespaceAndPath("lucy_atmos", "gasoverlays"));
+        event.register(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png"), ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlays"));
     }
 }
