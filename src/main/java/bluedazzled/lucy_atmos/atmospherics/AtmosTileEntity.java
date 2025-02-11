@@ -26,7 +26,7 @@ public class AtmosTileEntity extends BlockEntity {
 
     public int pressure_difference;
     public int pressure_direction;
-    public boolean active = false;
+    public boolean active;
 
     public CompoundTag tileInfo;
 
@@ -52,6 +52,10 @@ public class AtmosTileEntity extends BlockEntity {
         updateTotalMoles();
         updatePressure();
         this.tileInfo.put("gasMix", this.gasMix);
+        setChanged();
+    }
+    public void updateTileInfo() { //Because maybe I don't want to recalculate everything
+        this.tileInfo.putBoolean("active", active);
         setChanged();
     }
 
@@ -80,6 +84,7 @@ public class AtmosTileEntity extends BlockEntity {
 
     public void setActive(boolean active) {
         this.active = active;
+        updateTileInfo();
     }
     public boolean getActive() {
         return this.active;
