@@ -13,13 +13,18 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import static bluedazzled.lucy_atmos.atmospherics.GasConstants.*;
+import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
+
 public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
+    private static final ResourceLocation EYE = ResourceLocation.fromNamespaceAndPath(MODID, "textures/tgui/eye.png");
 
     private Player player;
     private BlockEntity blockent;
@@ -36,12 +41,12 @@ public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
         this.topPos = (this.height - this.imageHeight) / 2;
 
         this.box = new EditBox(Minecraft.getInstance().font.self(),
-                this.leftPos, this.topPos,
+                this.leftPos + 32, this.topPos + 96,
                 64, 16,
                 Component.literal(""));
 
         this.addRenderableWidget(Button.builder(Component.literal("setTemp"), button -> {onButtonPressed();})
-                .bounds(this.leftPos + 64, this.topPos, 64, 16)
+                .bounds(this.leftPos + 32, this.topPos + 112, 64, 16)
                 .build());
 
         this.addRenderableWidget(box);
@@ -50,6 +55,13 @@ public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick){
         super.render(graphics, mouseX, mouseY, partialTick);
+        graphics.blit(
+                RenderType::guiTextured,
+                EYE,
+                this.leftPos, this.topPos,
+                0, 0,
+                8, 8,
+                8, 8);
     }
 
     @Override
@@ -60,20 +72,21 @@ public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
                 this.leftPos, this.topPos,
                 0, 0,
                 this.imageWidth, this.imageHeight,
-                256, 256
-        );
+                256, 256);
     }
 
     private void onButtonPressed(){
         this.minecraft.player.displayClientMessage(Component.literal(this.box.getValue()), false);
-        PacketDistributor.sendToServer(new GasAnaPacket(Double.parseDouble(this.box.getValue())));
-        System.out.println("Sent data to the server");
+        try {
+            PacketDistributor.sendToServer(new GasAnaPacket(Double.parseDouble(this.box.getValue())));
+        } catch (NumberFormatException e) {//Man, who would've thought we'd crash if we put in a string for a number?
+            PacketDistributor.sendToServer(new GasAnaPacket(T20C)); //sets the default to T20C
+        }
     }
 
     @Override
     public void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        super.renderLabels(graphics, mouseX, mouseY);
-        //Draw the string once I get the gui base done
-//        graphics.drawString(this.getFont(), "Gas Analyzer")
+        //Draw the string once I get the gui base done (sike bitch using placehgolder for now :3)
+        graphics.drawCenteredString(this.getFont(), "Gas Analyzer", 85, 0, -1);
     }
 }
