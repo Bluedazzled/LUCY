@@ -30,6 +30,8 @@ import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 @MethodsReturnNonnullByDefault
 public class GasAnalyzer extends Item {
+    private double temperature;
+
     public GasAnalyzer() {
         super(new Properties()
                 .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MODID, "gas_analyzer")))
@@ -40,6 +42,10 @@ public class GasAnalyzer extends Item {
     public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
         return !player.isCreative();
     }
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+
     public void leftClickedBlock(ServerPlayer player, Level level, BlockPos pos) {
         BlockEntity blockent = level.getBlockEntity(pos);
 
@@ -49,10 +55,10 @@ public class GasAnalyzer extends Item {
                         (containerId, playerInventory, serverPlayer) -> new GasAnaMenu(containerId, playerInventory),
                         Component.translatable("menu.title.lucy_atmos.gasanamenu")
                 ));
-            }
-        } else {
-            if (blockent instanceof AtmosTileEntity atmosTile) {
-                //set data
+            } else {
+                if (blockent instanceof AtmosTileEntity atmosTile) {
+                    atmosTile.setTemperature(this.temperature);
+                }
             }
         }
     }

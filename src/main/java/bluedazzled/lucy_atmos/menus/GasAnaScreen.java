@@ -1,5 +1,6 @@
 package bluedazzled.lucy_atmos.menus;
 
+import bluedazzled.lucy_atmos.networking.GasAnaPacket;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
 
@@ -64,6 +66,14 @@ public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
 
     private void onButtonPressed(){
         this.minecraft.player.displayClientMessage(Component.literal(this.box.getValue()), false);
+        PacketDistributor.sendToServer(new GasAnaPacket(Double.parseDouble(this.box.getValue())));
+        System.out.println("Sent data to the server");
+    }
 
+    @Override
+    public void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        super.renderLabels(graphics, mouseX, mouseY);
+        //Draw the string once I get the gui base done
+//        graphics.drawString(this.getFont(), "Gas Analyzer")
     }
 }
