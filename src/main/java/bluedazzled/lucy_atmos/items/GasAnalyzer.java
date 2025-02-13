@@ -1,16 +1,24 @@
 package bluedazzled.lucy_atmos.items;
 
 import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
+import bluedazzled.lucy_atmos.menus.GasAnaMenu;
+import bluedazzled.lucy_atmos.menus.GasAnaScreen;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -25,7 +33,28 @@ public class GasAnalyzer extends Item {
     public GasAnalyzer() {
         super(new Properties()
                 .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MODID, "gas_analyzer")))
+                //.component()
         );
+    }
+    @Override
+    public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
+        return !player.isCreative();
+    }
+    public void leftClickedBlock(ServerPlayer player, Level level, BlockPos pos) {
+        BlockEntity blockent = level.getBlockEntity(pos);
+
+        if (player.hasPermissions(2)) {
+            if (player.isCrouching()) {
+                player.openMenu(new SimpleMenuProvider(
+                        (containerId, playerInventory, serverPlayer) -> new GasAnaMenu(containerId, playerInventory),
+                        Component.translatable("menu.title.lucy_atmos.gasanamenu")
+                ));
+            }
+        } else {
+            if (blockent instanceof AtmosTileEntity atmosTile) {
+                //set data
+            }
+        }
     }
 
     @Override
@@ -43,9 +72,6 @@ public class GasAnalyzer extends Item {
         BlockEntity blockent = level.getBlockEntity(blockpos);
         if (!(blockent instanceof AtmosTileEntity atmosTile)) {
             return InteractionResult.PASS;
-        }
-        if (player.isCrouching() && player.hasPermissions(2)) {
-            //open menu
         }
 
         CompoundTag gasMix = atmosTile.getGasMix();
