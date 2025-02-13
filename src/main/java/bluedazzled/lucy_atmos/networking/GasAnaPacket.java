@@ -34,13 +34,11 @@ public record GasAnaPacket(double temperature) implements CustomPacketPayload {
     }
     public class ServerPayloadHandler {
         public static void handleDataOnNetwork(final GasAnaPacket data, final IPayloadContext context) {
-            System.out.println("Received a packet from something");
             context.enqueueWork(() -> {
                     ServerPlayer player = (ServerPlayer) context.player();
                     ItemStack stack = player.getMainHandItem();
                     if (stack.getItem() instanceof GasAnalyzer gasAnalyzer) { //Which should always be the case since GasAnaPacket is specifically designed to be for gas analyzers only. Albeit, I should probably rearrange this. Later.
                         gasAnalyzer.setTemperature(data.temperature);
-                        System.out.println("Attempted to write setTemp in the gasAnalyzer");
                     }
             });
         }
