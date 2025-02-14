@@ -14,32 +14,34 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 
+import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
+
 
 public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> { //Blockstates are a work of art. This. This is bullshit.
     public OverlayRenderer(BlockEntityRendererProvider.Context context) {}
-    private static final ResourceLocation PLASMA_OVERLAY = ResourceLocation.fromNamespaceAndPath("lucy_atmos", "gasoverlay/plasma");
+    private static final ResourceLocation PLASMA_OVERLAY = ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlay/plasma");
 
 
     @Override
     public void render(AtmosTileEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-        VertexConsumer buffer = bufferSource.getBuffer(RenderType.text(ResourceLocation.fromNamespaceAndPath("lucy_atmos", "textures/atlas/gasoverlays.png")));
+        VertexConsumer buffer = bufferSource.getBuffer(RenderType.text(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png")));
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
         float scale = 0.5f;
         int opacity = 128;
 
         //I just want to preface this by saying this shit is jank and I'm sorry but I can't think of another way of doing this
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.UP,opacity);
+        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.UP, opacity);
         renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.DOWN, opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.NORTH,opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.SOUTH,opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.EAST,opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.WEST,opacity);
+        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.NORTH, opacity);
+        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.SOUTH, opacity);
+        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.EAST, opacity);
+        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.WEST, opacity);
         poseStack.popPose();
     }
 
     private void renderQuad(PoseStack poseStack, VertexConsumer buffer, float scale, ResourceLocation texture, Direction direction, int opacity) {
-        TextureAtlasSprite sprite = Minecraft.getInstance().getModelManager().getAtlas(ResourceLocation.fromNamespaceAndPath("lucy_atmos", "textures/atlas/gasoverlays.png")).getSprite(texture);
+        TextureAtlasSprite sprite = Minecraft.getInstance().getModelManager().getAtlas(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png")).getSprite(texture);
 
         int b1 = LightTexture.FULL_BRIGHT >> 16 & 65535;
         int b2 = LightTexture.FULL_BRIGHT & 65535;
