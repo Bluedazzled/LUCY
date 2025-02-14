@@ -1,4 +1,4 @@
-package bluedazzled.lucy_atmos.atmospherics.gas;
+package bluedazzled.lucy_atmos.atmospherics;
 //All of these values are ripped shamelessly straight from https://github.com/tgstation/tgstation/blob/master/code/__DEFINES/atmospherics/atmos_core.dm
 public final class GasConstants {
     //kPa*L/(K*mol
