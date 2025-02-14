@@ -1,7 +1,6 @@
 package bluedazzled.lucy_atmos.items;
 
 import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
-import bluedazzled.lucy_atmos.blocks.markiplier;
 import bluedazzled.lucy_atmos.menus.GasAnaMenu;
 import bluedazzled.lucy_atmos.menus.GasAnaScreen;
 import net.minecraft.MethodsReturnNonnullByDefault;
