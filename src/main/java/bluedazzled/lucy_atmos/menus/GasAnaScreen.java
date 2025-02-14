@@ -1,26 +1,20 @@
 package bluedazzled.lucy_atmos.menus;
 
 import bluedazzled.lucy_atmos.networking.GasAnaPacket;
-import net.minecraft.client.GameNarrator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.ContainerScreen;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import static bluedazzled.lucy_atmos.atmospherics.GasConstants.*;
+import static bluedazzled.lucy_atmos.atmospherics.GasConstants.T20C;
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {

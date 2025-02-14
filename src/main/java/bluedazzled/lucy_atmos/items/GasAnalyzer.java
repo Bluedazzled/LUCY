@@ -2,30 +2,24 @@ package bluedazzled.lucy_atmos.items;
 
 import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
 import bluedazzled.lucy_atmos.menus.GasAnaMenu;
-import bluedazzled.lucy_atmos.menus.GasAnaScreen;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static bluedazzled.lucy_atmos.Registration.*;
+import static bluedazzled.lucy_atmos.Registration.ATMOS_TILE_BLOCK;
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 @MethodsReturnNonnullByDefault

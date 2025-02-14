@@ -1,7 +1,6 @@
 package bluedazzled.lucy_atmos.blocks;
 
 import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
-import com.google.j2objc.annotations.Property;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static bluedazzled.lucy_atmos.Registration.ATMOS_TILE_ENTITY;

@@ -1,9 +1,9 @@
 package bluedazzled.lucy_atmos;
 
-import bluedazzled.lucy_atmos.atmospherics.OverlayRenderer;
-import bluedazzled.lucy_atmos.blocks.markiplier;
-import bluedazzled.lucy_atmos.blocks.AtmosTileBlock;
 import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
+import bluedazzled.lucy_atmos.atmospherics.OverlayRenderer;
+import bluedazzled.lucy_atmos.blocks.AtmosTileBlock;
+import bluedazzled.lucy_atmos.blocks.markiplier;
 import bluedazzled.lucy_atmos.items.GasAnalyzer;
 import bluedazzled.lucy_atmos.menus.GasAnaMenu;
 import net.minecraft.core.registries.Registries;
