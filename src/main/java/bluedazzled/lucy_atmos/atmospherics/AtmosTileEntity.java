@@ -17,11 +17,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
+import static bluedazzled.lucy_atmos.atmospherics.gas.GasConstants.*;
 import java.util.Objects;
-
-import static bluedazzled.lucy_atmos.atmospherics.GasConstants.*;
-import static bluedazzled.lucy_atmos.Registration.*;
 
 @ParametersAreNonnullByDefault
 public class AtmosTileEntity extends BlockEntity {
