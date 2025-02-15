@@ -12,18 +12,24 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.TransparentBlock;
 import org.joml.Matrix4f;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 
-public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> { //Blockstates are a work of art. This. This is bullshit.
-    public OverlayRenderer(BlockEntityRendererProvider.Context context) {}
+public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> {
+    private static final Logger log = LoggerFactory.getLogger(OverlayRenderer.class); //Blockstates are a work of art. This. This is bullshit.
+    public OverlayRenderer(BlockEntityRendererProvider.Context context) {
+//        context.getBlockEntityRenderDispatcher().level.getBlockEntity() //TODO: get our pos. somehow. i swear we can utilize the level... maybe not...
+    }
     private static final ResourceLocation PLASMA_OVERLAY = ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlay/plasma");
 
 
     // This method is called every frame in order to render the block entity. Parameters are:
-    // - blockEntity:   The block entity instance being rendered. Uses the generic type passed to the super interface.
+    // - blockEntity:   The block entity instance being rendered. Uses the generic type passed to the super interface
     // - partialTick:   The amount of time, in fractions of a tick (0.0 to 1.0), that has passed since the last tick.
     // - poseStack:     The pose stack to render to.
     // - bufferSource:  The buffer source to get vertex buffers from.
@@ -37,13 +43,9 @@ public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> { /
         float scale = 0.5f;
         int opacity = 128;
 
-        //I just want to preface this by saying this shit is jank and I'm sorry but I can't think of another way of doing this
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.UP, opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.DOWN, opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.NORTH, opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.SOUTH, opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.EAST, opacity);
-        renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, Direction.WEST, opacity);
+        for (Direction direction : Direction.values()) { //TODO: implement getValidAdjTile() once the first TODO is done
+            renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, direction, opacity);
+        }
         poseStack.popPose();
     }
 
@@ -53,7 +55,7 @@ public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> { /
         int b1 = LightTexture.FULL_BRIGHT >> 16 & 65535;
         int b2 = LightTexture.FULL_BRIGHT & 65535;
         poseStack.pushPose();
-        switch (direction) { //Please see line 44 TODO: Force myself to constantly update this line in order to make sure I actually fix this jank
+        switch (direction) { //TODO: fix this shit, too janky
             case UP -> {
                 poseStack.translate(0, scale, 0);
                 poseStack.mulPose(Axis.XP.rotationDegrees(90));

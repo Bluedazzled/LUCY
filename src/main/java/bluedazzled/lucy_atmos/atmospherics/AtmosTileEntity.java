@@ -18,7 +18,7 @@ import static bluedazzled.lucy_atmos.atmospherics.GasConstants.*;
 public class AtmosTileEntity extends BlockEntity {
     private CompoundTag gasses;
     private CompoundTag gasMix;
-    private CompoundTag adjacentTiles;
+    protected CompoundTag adjacentTiles;
 
     private boolean active;
 
@@ -48,6 +48,9 @@ public class AtmosTileEntity extends BlockEntity {
     public void removeAdjTile(Direction direction, boolean updateTile) {
         this.adjacentTiles.remove(direction.getName());
         updateTileInfo(updateTile);
+    }
+    public boolean getValidAdjTile(Direction direction) {
+        return (this.adjacentTiles.getAllKeys().contains(direction.getName()));
     }
     public void tellAdjTilesWeDontExistAnymore(Level level, BlockPos pos) {
         //Will come up with a better name later
@@ -84,11 +87,11 @@ public class AtmosTileEntity extends BlockEntity {
         this.gasMix.put("gasses", this.gasses);
         updateTotalMoles();
         updatePressure();
-        this.tileInfo.put("gasMix", this.gasMix);
-        setChanged();
+        updateTileInfo(true);
     }
     public void updateTileInfo(boolean update) { //Because maybe I don't want to recalculate everything
         this.tileInfo.putBoolean("active", this.active);
+        this.tileInfo.put("gasMix", this.gasMix);
         this.tileInfo.put("adjacentTiles", this.adjacentTiles);
         setChanged();
     }
@@ -131,7 +134,6 @@ public class AtmosTileEntity extends BlockEntity {
 
         pressure = Math.round(pressure * 1000.0) / 1000.0;
         this.gasMix.putDouble("pressure", pressure);
-        setChanged();
     }
     public void updateTotalMoles() {
         double total = 0.0;
@@ -141,7 +143,6 @@ public class AtmosTileEntity extends BlockEntity {
         }
         total = Math.round(total * 1000.0) / 1000.0;
         this.gasMix.putDouble("totalMoles", total);
-        setChanged();
     }
 
     @Override
