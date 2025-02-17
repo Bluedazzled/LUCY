@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import static bluedazzled.lucy_atmos.atmospherics.GasConstants.T20C;
+import static bluedazzled.lucy_atmos.atmospherics.Definitions.T20C;
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {

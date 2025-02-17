@@ -1,5 +1,8 @@
 package bluedazzled.lucy_atmos.atmospherics;
 
+import bluedazzled.lucy_atmos.atmospherics.air.ChunkTileList;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -9,20 +12,24 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.Objects;
 
 import static bluedazzled.lucy_atmos.Registration.ATMOS_TILE_ENTITY;
-import static bluedazzled.lucy_atmos.atmospherics.GasConstants.*;
+import static bluedazzled.lucy_atmos.atmospherics.Definitions.*;
 
 @ParametersAreNonnullByDefault
 public class AtmosTileEntity extends BlockEntity {
     private CompoundTag gasses;
     private CompoundTag gasMix;
-    protected CompoundTag adjacentTiles;
-
+    private CompoundTag adjacentTiles;
+    private CompoundTag tileInfo;
+    //Below are simulation related variables. Why's this comment here? Fuck you, that's why.
+    //I may or may not include these in NBT data, I *really* shouldn't just to shave down on packet sizes.
+    private Direction pressureDirection;
+    private double pressureDifference;
     private boolean active;
 
-    private CompoundTag tileInfo;
 
     public AtmosTileEntity(BlockPos pos, BlockState state) {
         super(ATMOS_TILE_ENTITY.get(), pos, state);
@@ -35,7 +42,6 @@ public class AtmosTileEntity extends BlockEntity {
         this.gasMix.putDouble("volume", TILE_VOLUME);
         addGas("oxygen", MOLES_O2STANDARD);
         addGas("nitrogen", MOLES_N2STANDARD);
-        setActive(false);
     }
     public void setAdjTile(Direction direction, BlockPos pos, boolean updateTile) {
         CompoundTag target = new CompoundTag();
@@ -61,7 +67,7 @@ public class AtmosTileEntity extends BlockEntity {
                 atmosTile.removeAdjTile(Objects.requireNonNull(Direction.byName(key)).getOpposite(), false); //Once again, I fucking hate IntelliJ sometimes. Shut up about your stupid NullPointerException!
             }
         }
-        setChanged();
+//        setChanged();
     }
     public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockent) {
         //tbd
@@ -76,9 +82,8 @@ public class AtmosTileEntity extends BlockEntity {
                 atmosTile.setAdjTile(direction.getOpposite(), pos, false);
             }
         }
-        setChanged();
+//        setChanged();
     }
-
     public CompoundTag getGasMix() {
         return this.gasMix;
     }
@@ -93,7 +98,9 @@ public class AtmosTileEntity extends BlockEntity {
         this.tileInfo.putBoolean("active", this.active);
         this.tileInfo.put("gasMix", this.gasMix);
         this.tileInfo.put("adjacentTiles", this.adjacentTiles);
-        setChanged();
+        if (update) {
+            setChanged();
+        }
     }
     public void setTemperature(double temperature) {
         this.gasMix.putDouble("temperature", Math.max(temperature, TCMB));
@@ -120,7 +127,7 @@ public class AtmosTileEntity extends BlockEntity {
 
     public void setActive(boolean active) {
         this.active = active;
-        updateTileInfo(true);
+        updateTileInfo(false);
     }
     public boolean getActive() {
         return this.active;
@@ -161,15 +168,22 @@ public class AtmosTileEntity extends BlockEntity {
     public void onLoad() {
         super.onLoad();
         if (this.level != null && !this.level.isClientSide) {
-            checkNearbyTiles(this.level, this.getBlockPos());
+            if (!ChunkTileList.getChunkTileList(this.level.getChunkAt(this.getBlockPos())).contains(this.getBlockPos())) {
+                checkNearbyTiles(this.level, this.getBlockPos());
+                setActive(true);
+                ChunkTileList.addTileToList(this.level.getChunkAt(this.getBlockPos()), this);
+            }
         }
     }
 
     @Override
     public void setRemoved() {
         super.setRemoved();
-        if (this.level != null && !this.level.isClientSide) {
-            tellAdjTilesWeDontExistAnymore(this.level, getBlockPos());
+        if (this.level != null && !this.level.isClientSide && this.level.isLoaded(this.getBlockPos())) {
+            if (ChunkTileList.getChunkTileList(this.level.getChunkAt(this.getBlockPos())).contains(this.getBlockPos())) {
+                tellAdjTilesWeDontExistAnymore(this.level, getBlockPos());
+                ChunkTileList.removeTileFromList(this.level.getChunkAt(this.getBlockPos()), this);
+            }
         }
     }
 }

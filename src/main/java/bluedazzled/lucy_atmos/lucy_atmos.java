@@ -1,6 +1,7 @@
 package bluedazzled.lucy_atmos;
 
 import bluedazzled.lucy_atmos.atmospherics.OverlayRenderer;
+import bluedazzled.lucy_atmos.atmospherics.air.ChunkTileList;
 import bluedazzled.lucy_atmos.menus.GasAnaScreen;
 import bluedazzled.lucy_atmos.networking.GasAnaPacket;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -10,13 +11,20 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterMaterialAtlasesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
+import static bluedazzled.lucy_atmos.Registration.ATTACHMENT_TYPES;
 import static bluedazzled.lucy_atmos.Registration.GASANA_MENU;
 
+
+/*
+    All ye who enter here, a few notes I should state, and this WILL be updated eventually
+    A comment with /// is copied (or based upon) a comment contained within LINDA's code (y'know, our base?)
+*/
 @Mod(lucy_atmos.MODID)
 public class lucy_atmos {
     public static final String MODID = "lucy_atmos";
@@ -31,7 +39,6 @@ public class lucy_atmos {
     }
     private void commonSetup(final FMLCommonSetupEvent event) {
         BlockEntityRenderers.register(Registration.ATMOS_TILE_ENTITY.get(), OverlayRenderer::new);
-
     }
     public void registerAtlas(final RegisterMaterialAtlasesEvent event) {
         event.register(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png"), ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlays"));
