@@ -10,7 +10,6 @@ import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -26,11 +25,13 @@ public class ChunkTileList {
     public static void tick(ServerTickEvent.Pre event) {
         Level level = event.getServer().getLevel(Level.OVERWORLD);
         for (ChunkPos pos : getGlobalTileChunks(level)) {
+            //checks if the chunk is loaded so we don't bog down the server i didn't *need* to do this but i don't wanna do it later
             if (level.getChunkSource().getChunk(pos.x, pos.z, ChunkStatus.FULL, true) instanceof LevelChunk chunk) {
                 updateChunkActiveList(chunk);
             }
         }
     }
+    //list of all tiles per chunk
     private static final Logger LOGGER = LogUtils.getLogger();
     public static List<BlockPos> getChunkAllList(LevelChunk chunk) {
         return chunk.getData(CHUNK_ALLTILES);
@@ -55,7 +56,7 @@ public class ChunkTileList {
         list.remove(pos);
         setChunkAllList(chunk, list);
     }
-
+    //list of all active tiles per chunk
     public static List<BlockPos> getChunkActiveList(LevelChunk chunk) {
         return chunk.getData(CHUNK_ACTIVETILES);
     }
@@ -82,7 +83,7 @@ public class ChunkTileList {
         }
         setChunkActiveList(chunk, activeList);
     }
-
+    //list of all chunks with tiles stored at 0, 0 because i couldn't be bothered to rig together a SavedData. this will DEFINITELY break when done in another dimension. oh well!
     public static List<ChunkPos> getGlobalTileChunks(Level level) {
         LevelChunk chunk = level.getChunk(0,0); //may 0 0 have mercy on us all!
         return chunk.getData(GLOBAL_TILECHUNKS);
