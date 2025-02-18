@@ -36,21 +36,22 @@ public class ChunkTileList {
         return chunk.getData(CHUNK_ALLTILES);
     }
     public static void setChunkAllList(LevelChunk chunk, List<BlockPos> list) {
-            chunk.setData(CHUNK_ALLTILES, list);
-            chunk.markUnsaved();
+        chunk.setData(CHUNK_ALLTILES, list);
+        if (!getGlobalTileChunks(chunk.getLevel()).contains(chunk.getPos())) { //if this chunk isn't in the global chunk list
+            addChunkToGlobalList(chunk.getLevel(), chunk.getPos());
+        }
+        if (getChunkAllList(chunk).isEmpty()) { //if the chunk is empty take us out of the global chunk list
+            removeChunkFromGlobalList(chunk.getLevel(), chunk.getPos());
+        }
+        chunk.markUnsaved();
     }
     public static void addToAllList(LevelChunk chunk, AtmosTileEntity tile) {
         List<BlockPos> list = new ArrayList<>(getChunkAllList(chunk));
-        if (!getGlobalTileChunks(chunk.getLevel()).contains(chunk.getPos())) {
-            addChunkToGlobalList(chunk.getLevel(), chunk.getPos());
-            System.out.println("added to global chunk list");
-        }
         list.add(tile.getBlockPos());
         setChunkAllList(chunk, list);
     }
     public static void removeFromAllList(LevelChunk chunk, BlockPos pos) {
         List<BlockPos> list = new ArrayList<>(getChunkAllList(chunk));
-
         list.remove(pos);
         setChunkAllList(chunk, list);
     }
