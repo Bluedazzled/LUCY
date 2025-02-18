@@ -1,7 +1,6 @@
 package bluedazzled.lucy_atmos;
 
 import bluedazzled.lucy_atmos.atmospherics.OverlayRenderer;
-import bluedazzled.lucy_atmos.atmospherics.air.ChunkTileList;
 import bluedazzled.lucy_atmos.menus.GasAnaScreen;
 import bluedazzled.lucy_atmos.networking.GasAnaPacket;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -11,13 +10,11 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterMaterialAtlasesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-import static bluedazzled.lucy_atmos.Registration.ATTACHMENT_TYPES;
 import static bluedazzled.lucy_atmos.Registration.GASANA_MENU;
 
 

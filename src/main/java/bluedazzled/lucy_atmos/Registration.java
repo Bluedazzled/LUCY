@@ -10,18 +10,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -31,7 +27,6 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -105,10 +100,22 @@ public class Registration {
             Codec.INT.fieldOf("z").forGetter(BlockPos::getZ)
     ).apply(instance, BlockPos::new));
 
-    public static final Supplier<AttachmentType<List<BlockPos>>> CHUNK_ATMOSTILES = ATTACHMENT_TYPES.register(
-            "chunk_atmostiles", () -> AttachmentType
+    public static final Supplier<AttachmentType<List<BlockPos>>> CHUNK_ALLTILES = ATTACHMENT_TYPES.register(
+            "chunk_alltiles", () -> AttachmentType
                     .<List<BlockPos>>builder(() -> new ArrayList<>())
                     .serialize(Codec.list(BLOCKPOS_CODEC))
+                    .build()
+    );
+    public static final Supplier<AttachmentType<List<BlockPos>>> CHUNK_ACTIVETILES = ATTACHMENT_TYPES.register(
+            "chunk_activetiles", () -> AttachmentType
+                    .<List<BlockPos>>builder(() -> new ArrayList<>())
+                    .serialize(Codec.list(BLOCKPOS_CODEC))
+                    .build()
+    );
+    public static final Supplier<AttachmentType<List<ChunkPos>>> GLOBAL_TILECHUNKS = ATTACHMENT_TYPES.register(
+            "global_tilechunks", () -> AttachmentType
+                    .<List<ChunkPos>>builder(() -> new ArrayList<>())
+                    .serialize(Codec.list(ChunkPos.CODEC))
                     .build()
     );
 
