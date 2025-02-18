@@ -19,7 +19,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static bluedazzled.lucy_atmos.Registration.ATMOS_TILE_ENTITY;
 
 @ParametersAreNonnullByDefault
-public class AtmosTileBlock extends Block implements EntityBlock {
+public class AtmosTileBlock extends Block implements EntityBlock { //this only exists to make AtmosTileEntity work
 
     public AtmosTileBlock() {
         super(BlockBehaviour.Properties.of()
@@ -34,9 +34,9 @@ public class AtmosTileBlock extends Block implements EntityBlock {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return type == ATMOS_TILE_ENTITY.get() ? AtmosTileEntity::tick : null;
         //Yeah so this is magic. What the fuck does this even mean? Who knows?
         //Anyone who is competent in java does of course!
+        return type == ATMOS_TILE_ENTITY.get() ? AtmosTileEntity::tick : null;
     }
 
 }

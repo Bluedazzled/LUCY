@@ -50,6 +50,7 @@ public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> {
     }
 
     private void renderQuad(PoseStack poseStack, VertexConsumer buffer, float scale, ResourceLocation texture, Direction direction, int opacity) {
+        //i really need to start using variables, but what's the point in that if it's only going to be called once? like ok...
         TextureAtlasSprite sprite = Minecraft.getInstance().getModelManager().getAtlas(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png")).getSprite(texture);
 
         int b1 = LightTexture.FULL_BRIGHT >> 16 & 65535;
@@ -80,6 +81,7 @@ public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> {
                 poseStack.mulPose(Axis.YP.rotationDegrees(90));
             }
         }
+        //fuck ts
         Matrix4f matrix = poseStack.last().pose();
         buffer.addVertex(matrix, -scale, -scale, 0.0f).setColor(255, 255, 255, opacity).setUv(sprite.getU0(), sprite.getV0()).setUv2(b1, b2).setNormal(1, 0, 0);
         buffer.addVertex(matrix, -scale, scale, 0.0f).setColor(255, 255, 255, opacity).setUv(sprite.getU0(), sprite.getV1()).setUv2(b1, b2).setNormal(1, 0, 0);

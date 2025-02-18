@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMaterialAtlasesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -22,6 +23,8 @@ import static bluedazzled.lucy_atmos.Registration.GASANA_MENU;
     All ye who enter here, a few notes I should state, and this WILL be updated eventually
     A comment with /// is copied (or based upon) a comment contained within LINDA's code (y'know, our base?)
     There *may* be a **few** comments that vent, sorry! It is what it is.
+    Oh, and priorities for to dos are ambiguous.
+    grammar for comments vary depending on my mood and i will not be fixing them unless i feel like it
 */
 @Mod(lucy_atmos.MODID)
 public class lucy_atmos {
@@ -45,6 +48,7 @@ public class lucy_atmos {
     public void registerScreens(RegisterMenuScreensEvent event) {
         event.register(GASANA_MENU.get(), GasAnaScreen::new);
     }
+    //dude i have no fucking idea how this works todo: figure ts out priorirty: 3
     public void registerPackets(RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1")
                 .executesOn(HandlerThread.NETWORK);
@@ -55,6 +59,12 @@ public class lucy_atmos {
                     GasAnaPacket.ClientPayloadHandler::handleDataOnNetwork,
                     GasAnaPacket.ServerPayloadHandler::handleDataOnNetwork
                 )
+        );
+    }
+    private static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(
+                Registration.ATMOS_TILE_ENTITY.get(),
+                OverlayRenderer::new
         );
     }
 }

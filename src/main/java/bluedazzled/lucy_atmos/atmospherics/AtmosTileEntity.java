@@ -30,7 +30,6 @@ public class AtmosTileEntity extends BlockEntity {
     private double pressureDifference;
     private boolean active;
 
-
     public AtmosTileEntity(BlockPos pos, BlockState state) {
         super(ATMOS_TILE_ENTITY.get(), pos, state);
         this.gasMix = new CompoundTag();
@@ -102,6 +101,7 @@ public class AtmosTileEntity extends BlockEntity {
             setChanged();
         }
     }
+
     public void setTemperature(double temperature) {
         this.gasMix.putDouble("temperature", Math.max(temperature, TCMB));
         updateAll();
@@ -157,7 +157,6 @@ public class AtmosTileEntity extends BlockEntity {
         super.loadAdditional(tag, registries);
         this.tileInfo = tag.getCompound("tileInfo");
     }
-
     @Override
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
@@ -167,6 +166,7 @@ public class AtmosTileEntity extends BlockEntity {
     @Override
     public void onLoad() {
         super.onLoad();
+        //level not null and not client sided
         if (this.level != null && !this.level.isClientSide) {
             if (!ChunkTileList.getChunkAllList(this.level.getChunkAt(this.getBlockPos())).contains(this.getBlockPos())) {
                 checkNearbyTiles(this.level, this.getBlockPos());
@@ -175,10 +175,10 @@ public class AtmosTileEntity extends BlockEntity {
             }
         }
     }
-
     @Override
     public void setRemoved() {
         super.setRemoved();
+        //level not null, not client sided, and is loaded
         if (this.level != null && !this.level.isClientSide && this.level.isLoaded(this.getBlockPos())) {
             if (ChunkTileList.getChunkAllList(this.level.getChunkAt(this.getBlockPos())).contains(this.getBlockPos())) {
                 tellAdjTilesWeDontExistAnymore(this.level, this.getBlockPos());

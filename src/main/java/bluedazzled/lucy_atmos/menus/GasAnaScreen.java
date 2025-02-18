@@ -20,9 +20,6 @@ import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
     private static final ResourceLocation EYE = ResourceLocation.fromNamespaceAndPath(MODID, "textures/tgui/eye.png");
 
-    private Player player;
-    private BlockEntity blockent;
-
     public GasAnaScreen(GasAnaMenu menu, Inventory inv, Component title) {
         super(menu, inv, Component.literal("gasana_screen"));
 
@@ -34,21 +31,23 @@ public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
         this.leftPos = (this.width - this.imageWidth) / 2;
         this.topPos = (this.height - this.imageHeight) / 2;
 
+        //temperature edit box
         this.box = new EditBox(Minecraft.getInstance().font.self(),
                 this.leftPos + 32, this.topPos + 96,
                 64, 16,
-                Component.literal(""));
-
+                Component.literal("")); //default to empty
+        //temperature button
         this.addRenderableWidget(Button.builder(Component.literal("setTemp"), button -> {onButtonPressed();})
                 .bounds(this.leftPos + 32, this.topPos + 112, 64, 16)
                 .build());
-
+        //wtf did i add this for again?
         this.addRenderableWidget(box);
     }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick){
         super.render(graphics, mouseX, mouseY, partialTick);
+        //eye
         graphics.blit(
                 RenderType::guiTextured,
                 EYE,

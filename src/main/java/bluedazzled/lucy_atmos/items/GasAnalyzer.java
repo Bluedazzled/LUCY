@@ -34,6 +34,7 @@ public class GasAnalyzer extends Item {
     }
     @Override
     public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
+        //sword behavior ahh
         return !player.isCreative();
     }
     public void setTemperature(double temperature) {

@@ -84,7 +84,7 @@ public class ChunkTileList {
     }
 
     public static List<ChunkPos> getGlobalTileChunks(Level level) {
-        LevelChunk chunk = level.getChunk(0,0);
+        LevelChunk chunk = level.getChunk(0,0); //may 0 0 have mercy on us all!
         return chunk.getData(GLOBAL_TILECHUNKS);
     }
     public static void setGlobalTileChunks(Level level, List<ChunkPos> list) {

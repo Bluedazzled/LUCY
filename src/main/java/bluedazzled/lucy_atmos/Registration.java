@@ -44,10 +44,7 @@ public class Registration {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, MODID);
 
-    public static final DeferredItem<GasAnalyzer> GAS_ANALYZER = ITEMS.register(
-            "gas_analyzer",
-            GasAnalyzer::new);
-
+    //blocks
     public static final DeferredBlock<markiplier> MARKIPLIER = BLOCKS.register(
             "markiplier",
             markiplier::new);
@@ -55,6 +52,7 @@ public class Registration {
             "atmos_tile_block",
             AtmosTileBlock::new);
 
+    //items
     public static final DeferredItem<Item> MARKIPLIER_ITEM = ITEMS.register(
             "markiplier",
             () -> new BlockItem(MARKIPLIER.get(),
@@ -71,7 +69,10 @@ public class Registration {
                             .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MODID, "atmos_tile_block")))
                 )
     );
-
+    public static final DeferredItem<GasAnalyzer> GAS_ANALYZER = ITEMS.register(
+            "gas_analyzer",
+            GasAnalyzer::new);
+    //block entity (maybe entities one day)
     public static final Supplier<BlockEntityType<AtmosTileEntity>> ATMOS_TILE_ENTITY = BLOCK_ENTITY_TYPES.register(
             "atmos_tile_entity",
             () -> new BlockEntityType<>(
@@ -79,27 +80,21 @@ public class Registration {
                     Registration.ATMOS_TILE_BLOCK.get()
             )
     );
-
+    //menu (menus eventually)
     public static final Supplier<MenuType<GasAnaMenu>> GASANA_MENU = MENUS.register(
             "gasana_menu",
             () -> new MenuType<>(
                     GasAnaMenu::new,
                     FeatureFlags.DEFAULT_FLAGS)
     );
-
-    @SubscribeEvent
-    private static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(
-                Registration.ATMOS_TILE_ENTITY.get(),
-                OverlayRenderer::new
-        );
-    }
+    //codec definition(s)
     public static final Codec<BlockPos> BLOCKPOS_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("x").forGetter(BlockPos::getX),
             Codec.INT.fieldOf("y").forGetter(BlockPos::getY),
             Codec.INT.fieldOf("z").forGetter(BlockPos::getZ)
     ).apply(instance, BlockPos::new));
 
+    //attachment types
     public static final Supplier<AttachmentType<List<BlockPos>>> CHUNK_ALLTILES = ATTACHMENT_TYPES.register(
             "chunk_alltiles", () -> AttachmentType
                     .<List<BlockPos>>builder(() -> new ArrayList<>())
@@ -119,6 +114,7 @@ public class Registration {
                     .build()
     );
 
+    //the meat
     public static void init(IEventBus modEventBus) {
         ATTACHMENT_TYPES.register(modEventBus);
         BLOCKS.register(modEventBus);
