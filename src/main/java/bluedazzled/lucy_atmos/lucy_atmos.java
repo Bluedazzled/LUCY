@@ -21,6 +21,7 @@ import static bluedazzled.lucy_atmos.Registration.GASANA_MENU;
 /*
     All ye who enter here, a few notes I should state, and this WILL be updated eventually
     A comment with /// is copied (or based upon) a comment contained within LINDA's code (y'know, our base?)
+    There *may* be a **few** comments that vent, sorry! It is what it is.
 */
 @Mod(lucy_atmos.MODID)
 public class lucy_atmos {
