@@ -31,12 +31,11 @@ public class AtmosTileBlock extends Block implements EntityBlock { //this only e
         return new AtmosTileEntity(pos, state);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        //Yeah so this is magic. What the fuck does this even mean? Who knows?
-        //Anyone who is competent in java does of course!
-        return type == ATMOS_TILE_ENTITY.get() ? AtmosTileEntity::tick : null;
-    }
-
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+//        //Yeah so this is magic. What the fuck does this even mean? Who knows?
+//        //Anyone who is competent in java does of course!
+//        return type == ATMOS_TILE_ENTITY.get() ? AtmosTileEntity::tick : null;
+//    }
 }

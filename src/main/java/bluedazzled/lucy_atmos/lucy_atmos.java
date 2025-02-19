@@ -20,6 +20,9 @@ import static bluedazzled.lucy_atmos.Registration.GASANA_MENU;
 
 
 /*
+    EVERYTHING IN THE ATMOSPHERICS FOLDER WILL NOT BE FOLLOWING NORMAL NAMING CONVENTIONS!
+    THIS IS SO IT'S A MORE OR LESS 1:1 PORT SO IT MAKES DEBUGGING A *LITTLE* EASIER. NOT BY MUCH, JUST A LITTLE.
+
     All ye who enter here, a few notes I should state, and this WILL be updated eventually
     A comment with /// is copied (or based upon) a comment contained within LINDA's code (y'know, our base?)
     There *may* be a **few** comments that vent, sorry! It is what it is.

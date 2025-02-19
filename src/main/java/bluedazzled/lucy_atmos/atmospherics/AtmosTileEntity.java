@@ -1,6 +1,5 @@
 package bluedazzled.lucy_atmos.atmospherics;
 
-import bluedazzled.lucy_atmos.atmospherics.air.ChunkTileList;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,20 +14,21 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 import static bluedazzled.lucy_atmos.Registration.ATMOS_TILE_ENTITY;
-import static bluedazzled.lucy_atmos.atmospherics.Definitions.*;
+import static bluedazzled.lucy_atmos.atmospherics.defines.atmos_core.*;
+import static bluedazzled.lucy_atmos.atmospherics.sim.gas_mixture.*;
 
 @ParametersAreNonnullByDefault
 public class AtmosTileEntity extends BlockEntity {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private CompoundTag gasses;
-    private CompoundTag gasMix;
-    private CompoundTag adjacentTiles;
-    private CompoundTag tileInfo;
+//    public gas_mixture gasMixture = new gas_mixture(); //uh... idk how else to do this...
+    public static final Logger LOGGER = LogUtils.getLogger();
+    public CompoundTag gasses;
+    public CompoundTag gasMix;
+    public CompoundTag adjacentTiles;
+    public CompoundTag tileInfo;
     //Below are simulation related variables. Why's this comment here? Fuck you, that's why.
     //I may or may not include these in NBT data, I *really* shouldn't just to shave down on packet sizes.
-    private Direction pressureDirection;
-    private double pressureDifference;
-    private boolean active;
+    public int current_cycle;
+    public boolean active;
 
     public AtmosTileEntity(BlockPos pos, BlockState state) {
         super(ATMOS_TILE_ENTITY.get(), pos, state);
@@ -37,10 +37,10 @@ public class AtmosTileEntity extends BlockEntity {
         this.tileInfo = new CompoundTag();
         this.adjacentTiles = new CompoundTag();
 
-        setTemperature(T20C);
+        this.gasMix.putDouble("temperature", T20C);
         this.gasMix.putDouble("volume", TILE_VOLUME);
-        addGas("oxygen", MOLES_O2STANDARD);
-        addGas("nitrogen", MOLES_N2STANDARD);
+        addGas(this, "oxygen", MOLES_O2STANDARD);
+        addGas(this, "nitrogen", MOLES_N2STANDARD);
     }
     public void setAdjTile(Direction direction, BlockPos pos, boolean updateTile) {
         CompoundTag target = new CompoundTag();
@@ -48,14 +48,21 @@ public class AtmosTileEntity extends BlockEntity {
         target.putInt("Y", pos.getY());
         target.putInt("Z", pos.getZ());
         this.adjacentTiles.put(direction.getName(), target);
-        updateTileInfo(updateTile);
+        updateTileInfo(this, updateTile);
     }
     public void removeAdjTile(Direction direction, boolean updateTile) {
         this.adjacentTiles.remove(direction.getName());
-        updateTileInfo(updateTile);
+        updateTileInfo(this, updateTile);
     }
-    public boolean getValidAdjTile(Direction direction) {
+    public boolean doesAdjTileExist(Direction direction) {
         return (this.adjacentTiles.getAllKeys().contains(direction.getName()));
+    }
+    public CompoundTag getAdjTileTag(Direction direction) {
+        return (this.adjacentTiles);
+    }
+    public BlockPos getAdjTilePos(Direction direction) {
+            CompoundTag tileTag = getAdjTileTag(direction);
+            return new BlockPos(tileTag.getInt("X"), tileTag.getInt("Y"), tileTag.getInt("Z"));
     }
     public void tellAdjTilesWeDontExistAnymore(Level level, BlockPos pos) {
         //Will come up with a better name later
@@ -67,9 +74,6 @@ public class AtmosTileEntity extends BlockEntity {
             }
         }
         setChanged();
-    }
-    public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockent) {
-        //tbd
     }
 
     public void checkNearbyTiles(Level level, BlockPos pos) {
@@ -83,73 +87,12 @@ public class AtmosTileEntity extends BlockEntity {
         }
         setChanged();
     }
-    public CompoundTag getGasMix() {
-        return this.gasMix;
-    }
-
-    public void updateAll() {
-        this.gasMix.put("gasses", this.gasses);
-        updateTotalMoles();
-        updatePressure();
-        updateTileInfo(true);
-    }
-    public void updateTileInfo(boolean update) { //Because maybe I don't want to recalculate everything
-        this.tileInfo.putBoolean("active", this.active);
-        this.tileInfo.put("gasMix", this.gasMix);
-        this.tileInfo.put("adjacentTiles", this.adjacentTiles);
-        if (update) {
-            setChanged();
-        }
-    }
-
-    public void setTemperature(double temperature) {
-        this.gasMix.putDouble("temperature", Math.max(temperature, TCMB));
-        updateAll();
-    }
-
-    public void clearGasses() { //Why would anyone want this? At all?
-        this.gasMix.remove("gasses");
-        this.gasses = new CompoundTag();
-        updateAll();
-    }
-    public void addGas(String key, double moles) {
-        this.gasses.putDouble(key, moles);
-        updateAll();
-    }
-    public void setGasMoles(String key, double moles) {
-        this.gasses.putDouble(key, moles);
-        updateAll();
-    }
-    public void removeGas(String key) {
-        this.gasses.remove(key);
-        updateAll();
-    }
 
     public void setActive(boolean active) {
         this.active = active;
-        updateTileInfo(false);
     }
     public boolean getActive() {
         return this.active;
-    }
-
-    public void updatePressure() {
-        double totalMoles = this.gasMix.getDouble("totalMoles");
-        double temperature = this.gasMix.getDouble("temperature");
-        int volume = this.gasMix.getInt("volume");
-        double pressure = (totalMoles * GAS_CONSTANT * temperature) / volume;
-
-        pressure = Math.round(pressure * 1000.0) / 1000.0;
-        this.gasMix.putDouble("pressure", pressure);
-    }
-    public void updateTotalMoles() {
-        double total = 0.0;
-        for (String key : this.gasses.getAllKeys()) {
-            double gasAmount = this.gasses.getDouble(key);
-            total += gasAmount;
-        }
-        total = Math.round(total * 1000.0) / 1000.0;
-        this.gasMix.putDouble("totalMoles", total);
     }
 
     @Override

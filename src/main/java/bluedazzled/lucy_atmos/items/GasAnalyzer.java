@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import static bluedazzled.lucy_atmos.Registration.ATMOS_TILE_BLOCK;
+import static bluedazzled.lucy_atmos.atmospherics.sim.gas_mixture.getGasMix;
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 @MethodsReturnNonnullByDefault
@@ -51,8 +52,8 @@ public class GasAnalyzer extends Item {
                         Component.translatable("menu.title.lucy_atmos.gasanamenu")
                 ));
             } else {
-                if (blockent instanceof AtmosTileEntity atmosTile) {
-                    atmosTile.setTemperature(this.temperature);
+                if (blockent instanceof AtmosTileEntity atmosTile) { //This entire function is, essentially, disabled. Entirely.
+//                    atmosTile.setTemperature(this.temperature);
                 }
             }
         }
@@ -75,7 +76,7 @@ public class GasAnalyzer extends Item {
             return InteractionResult.PASS;
         }
 
-        CompoundTag gasMix = atmosTile.getGasMix();
+        CompoundTag gasMix = getGasMix(atmosTile);
         CompoundTag gasses = gasMix.getCompound("gasses");
 
         if (player instanceof ServerPlayer serverPlayer) {

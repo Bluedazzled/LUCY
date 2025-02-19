@@ -1,6 +1,5 @@
-package bluedazzled.lucy_atmos.atmospherics.air;
+package bluedazzled.lucy_atmos.atmospherics;
 
-import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;

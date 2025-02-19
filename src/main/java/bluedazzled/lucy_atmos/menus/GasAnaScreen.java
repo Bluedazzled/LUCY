@@ -10,11 +10,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import static bluedazzled.lucy_atmos.atmospherics.Definitions.T20C;
+import static bluedazzled.lucy_atmos.atmospherics.defines.atmos_core.T20C;
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
