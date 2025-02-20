@@ -1,5 +1,6 @@
 package bluedazzled.lucy_atmos.atmospherics;
 
+import bluedazzled.lucy_atmos.atmospherics.environmental.turf_tile;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
@@ -45,7 +46,7 @@ public class ChunkTileList {
         }
         chunk.markUnsaved();
     }
-    public static void addToAllList(LevelChunk chunk, AtmosTileEntity tile) {
+    public static void addToAllList(LevelChunk chunk, turf_tile tile) {
         List<BlockPos> list = new ArrayList<>(getChunkAllList(chunk));
         list.add(tile.getBlockPos());
         setChunkAllList(chunk, list);
@@ -69,7 +70,7 @@ public class ChunkTileList {
 
         setChunkActiveList(chunk, new ArrayList<>());
         for (BlockPos tilePos : allList) {
-            if (chunk.getBlockEntity(tilePos) instanceof AtmosTileEntity tile) {
+            if (chunk.getBlockEntity(tilePos) instanceof turf_tile tile) {
                 if (tile.getActive()) {
                     activeList.add(tilePos);
                 } else {

@@ -3,6 +3,9 @@ package bluedazzled.lucy_atmos.atmospherics.defines;
 //All of these values are ripped shamelessly straight from code/__DEFINES/atmospherics/
 //Also I'm not porting all of these all at once because it may be months (Yes, months.) before I use them
 public final class atmos_core {
+    /* __DEFINES/flags.dm */ //Sorry I really need this for compability
+    public static final byte NONE = 0;
+    /* __DEFINES/atmospherics/atmos_core.dm */
     ///kPa*L/(K*mol)
     public static final double GAS_CONSTANT = 8.31;
     ///kPa

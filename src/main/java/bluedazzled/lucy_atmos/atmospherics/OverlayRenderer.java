@@ -1,5 +1,6 @@
 package bluedazzled.lucy_atmos.atmospherics;
 
+import bluedazzled.lucy_atmos.atmospherics.environmental.turf_tile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -12,7 +13,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.TransparentBlock;
 import org.joml.Matrix4f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 
-public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> {
+public class OverlayRenderer implements BlockEntityRenderer<turf_tile> {
     private static final Logger log = LoggerFactory.getLogger(OverlayRenderer.class); //Blockstates are a work of art. This. This is bullshit.
     public OverlayRenderer(BlockEntityRendererProvider.Context context) {
 //        context.getBlockEntityRenderDispatcher().level.getBlockEntity() //TODO: get our pos. somehow. i swear we can utilize the level... maybe not...
@@ -36,7 +36,7 @@ public class OverlayRenderer implements BlockEntityRenderer<AtmosTileEntity> {
     // - packedLight:   The light value of the block entity.
     // - packedOverlay: The current overlay value of the block entity, usually OverlayTexture.NO_OVERLAY.
     @Override
-    public void render(AtmosTileEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+    public void render(turf_tile blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         VertexConsumer buffer = bufferSource.getBuffer(RenderType.text(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png")));
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
