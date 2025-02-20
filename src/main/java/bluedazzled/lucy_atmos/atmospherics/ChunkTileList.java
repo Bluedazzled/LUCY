@@ -71,7 +71,7 @@ public class ChunkTileList {
         setChunkActiveList(chunk, new ArrayList<>());
         for (BlockPos tilePos : allList) {
             if (chunk.getBlockEntity(tilePos) instanceof turf_tile tile) {
-                if (tile.getActive()) {
+                if (false) { //temporary fuck you
                     activeList.add(tilePos);
                 } else {
                     return;
