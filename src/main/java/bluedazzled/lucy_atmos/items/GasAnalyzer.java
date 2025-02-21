@@ -1,6 +1,6 @@
 package bluedazzled.lucy_atmos.items;
 
-import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
+import bluedazzled.lucy_atmos.atmospherics.sim.turf_tile;
 import bluedazzled.lucy_atmos.menus.GasAnaMenu;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import static bluedazzled.lucy_atmos.Registration.ATMOS_TILE_BLOCK;
-import static bluedazzled.lucy_atmos.atmospherics.sim.gas_mixture.getGasMix;
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 @MethodsReturnNonnullByDefault
@@ -52,7 +51,7 @@ public class GasAnalyzer extends Item {
                         Component.translatable("menu.title.lucy_atmos.gasanamenu")
                 ));
             } else {
-                if (blockent instanceof AtmosTileEntity atmosTile) { //This entire function is, essentially, disabled. Entirely.
+                if (blockent instanceof turf_tile atmosTile) { //This entire function is, essentially, disabled. Entirely.
 //                    atmosTile.setTemperature(this.temperature);
                 }
             }
@@ -72,11 +71,11 @@ public class GasAnalyzer extends Item {
             return super.useOn(context);
         }
         BlockEntity blockent = level.getBlockEntity(blockpos);
-        if (!(blockent instanceof AtmosTileEntity atmosTile)) {
+        if (!(blockent instanceof turf_tile atmosTile)) {
             return InteractionResult.PASS;
         }
 
-        CompoundTag gasMix = getGasMix(atmosTile);
+        CompoundTag gasMix = atmosTile.gas_mixture.getGasMix();
         CompoundTag gasses = gasMix.getCompound("gasses");
 
         if (player instanceof ServerPlayer serverPlayer) {

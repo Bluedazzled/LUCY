@@ -1,5 +1,6 @@
-package bluedazzled.lucy_atmos.atmospherics;
+package bluedazzled.lucy_atmos.atmospherics.sim;
 
+import bluedazzled.lucy_atmos.atmospherics.ChunkTileList;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -8,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.fml.common.EventBusSubscriber;
 import org.slf4j.Logger;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -15,22 +17,22 @@ import java.util.Objects;
 
 import static bluedazzled.lucy_atmos.Registration.ATMOS_TILE_ENTITY;
 import static bluedazzled.lucy_atmos.atmospherics.defines.atmos_core.*;
+import static bluedazzled.lucy_atmos.atmospherics.sim.air.remove_from_active;
 import static bluedazzled.lucy_atmos.atmospherics.sim.gas_mixture.*;
+import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 @ParametersAreNonnullByDefault
-public class AtmosTileEntity extends BlockEntity {
-//    public gas_mixture gasMixture = new gas_mixture(); //uh... idk how else to do this...
-    public static final Logger LOGGER = LogUtils.getLogger();
-    public CompoundTag gasses;
-    public CompoundTag gasMix;
-    public CompoundTag adjacentTiles;
-    public CompoundTag tileInfo;
-    //Below are simulation related variables. Why's this comment here? Fuck you, that's why.
-    //I may or may not include these in NBT data, I *really* shouldn't just to shave down on packet sizes.
-    public int current_cycle;
-    public boolean active;
+public class turf_tile extends BlockEntity {
+    public gas_mixture gas_mixture = new gas_mixture(this);
+    private static final Logger LOGGER = LogUtils.getLogger();
+    protected CompoundTag gasses;
+    protected CompoundTag gasMix;
+    protected CompoundTag adjacentTiles;
+    protected CompoundTag tileInfo;
 
-    public AtmosTileEntity(BlockPos pos, BlockState state) {
+    protected boolean active;
+
+    public turf_tile(BlockPos pos, BlockState state) {
         super(ATMOS_TILE_ENTITY.get(), pos, state);
         this.gasMix = new CompoundTag();
         this.gasses = new CompoundTag();
@@ -39,8 +41,8 @@ public class AtmosTileEntity extends BlockEntity {
 
         this.gasMix.putDouble("temperature", T20C);
         this.gasMix.putDouble("volume", TILE_VOLUME);
-        addGas(this, "oxygen", MOLES_O2STANDARD);
-        addGas(this, "nitrogen", MOLES_N2STANDARD);
+        this.gas_mixture.addGas("oxygen", MOLES_O2STANDARD);
+        this.gas_mixture.addGas("nitrogen", MOLES_N2STANDARD);
     }
     public void setAdjTile(Direction direction, BlockPos pos, boolean updateTile) {
         CompoundTag target = new CompoundTag();
@@ -48,11 +50,11 @@ public class AtmosTileEntity extends BlockEntity {
         target.putInt("Y", pos.getY());
         target.putInt("Z", pos.getZ());
         this.adjacentTiles.put(direction.getName(), target);
-        updateTileInfo(this, updateTile);
+        this.gas_mixture.updateTileInfo(updateTile);
     }
     public void removeAdjTile(Direction direction, boolean updateTile) {
         this.adjacentTiles.remove(direction.getName());
-        updateTileInfo(this, updateTile);
+        this.gas_mixture.updateTileInfo(updateTile);
     }
     public boolean doesAdjTileExist(Direction direction) {
         return (this.adjacentTiles.getAllKeys().contains(direction.getName()));
@@ -69,7 +71,7 @@ public class AtmosTileEntity extends BlockEntity {
         for (String key : this.adjacentTiles.getAllKeys()) {
             //What kind of fucking sanity check must I put to get IntelliJ to shut up about this goddamn thing? It won't even run if getAllKeys() returns nothing!
             BlockPos neighbor = pos.relative(Objects.requireNonNull(Direction.byName(key)));
-            if (level.getBlockEntity(neighbor) instanceof AtmosTileEntity atmosTile) { //Sanity check part 2 because I also need that atmosTile definition
+            if (level.getBlockEntity(neighbor) instanceof turf_tile atmosTile) { //Sanity check part 2 because I also need that atmosTile definition
                 atmosTile.removeAdjTile(Objects.requireNonNull(Direction.byName(key)).getOpposite(), false); //Once again, I fucking hate IntelliJ sometimes. Shut up about your stupid NullPointerException!
             }
         }
@@ -79,7 +81,7 @@ public class AtmosTileEntity extends BlockEntity {
     public void checkNearbyTiles(Level level, BlockPos pos) {
         for (Direction direction : Direction.values()) {
             BlockPos neighbor = pos.relative(direction);
-            if (level.getBlockEntity(neighbor) instanceof AtmosTileEntity atmosTile) {
+            if (level.getBlockEntity(neighbor) instanceof turf_tile atmosTile) {
                 this.setAdjTile(direction, neighbor, false);
                 //Tell our neighbor to set us as their neighbor relative to where we are to them. Make sense?
                 atmosTile.setAdjTile(direction.getOpposite(), pos, false);
@@ -90,6 +92,7 @@ public class AtmosTileEntity extends BlockEntity {
 
     public void setActive(boolean active) {
         this.active = active;
+        gas_mixture.updateAll();
     }
     public boolean getActive() {
         return this.active;
@@ -132,4 +135,9 @@ public class AtmosTileEntity extends BlockEntity {
             }
         }
     }
+
+    public void process_cell() {
+        remove_from_active(this);
+    }
+
 }

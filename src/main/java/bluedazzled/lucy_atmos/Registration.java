@@ -1,7 +1,6 @@
 package bluedazzled.lucy_atmos;
 
-import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
-import bluedazzled.lucy_atmos.atmospherics.OverlayRenderer;
+import bluedazzled.lucy_atmos.atmospherics.sim.turf_tile;
 import bluedazzled.lucy_atmos.blocks.AtmosTileBlock;
 import bluedazzled.lucy_atmos.blocks.markiplier;
 import bluedazzled.lucy_atmos.items.GasAnalyzer;
@@ -19,9 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -73,10 +70,10 @@ public class Registration {
             "gas_analyzer",
             GasAnalyzer::new);
     //block entity (maybe entities one day)
-    public static final Supplier<BlockEntityType<AtmosTileEntity>> ATMOS_TILE_ENTITY = BLOCK_ENTITY_TYPES.register(
+    public static final Supplier<BlockEntityType<turf_tile>> ATMOS_TILE_ENTITY = BLOCK_ENTITY_TYPES.register(
             "atmos_tile_entity",
             () -> new BlockEntityType<>(
-                    AtmosTileEntity::new,
+                    turf_tile::new,
                     Registration.ATMOS_TILE_BLOCK.get()
             )
     );

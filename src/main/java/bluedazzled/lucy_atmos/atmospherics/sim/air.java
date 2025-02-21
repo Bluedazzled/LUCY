@@ -1,37 +1,50 @@
 package bluedazzled.lucy_atmos.atmospherics.sim;
 
-import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static bluedazzled.lucy_atmos.atmospherics.ChunkTileList.getChunkActiveList;
+import static bluedazzled.lucy_atmos.atmospherics.ChunkTileList.getAllActiveTiles;
+import static bluedazzled.lucy_atmos.atmospherics.ChunkTileList.removeFromChunkActiveList;
+import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
+import static net.minecraft.world.level.Level.OVERWORLD;
 
-//uh archived for now 'cause i'm preeeettyy fucking sure this is literally just for the air subsystem, which is run at startup, which we uh y'know don't need since we're updating constantly
+@EventBusSubscriber(modid = MODID)
 public class air {
-    //Deepest indentation of the reference file's function: 5
-    //Our deepest indentation: tbd
-    //Thanks DM for being an objectively easier language at times.
-    public void setupTiles(LevelChunk chunk) {
-        List<BlockPos> activeTiles = getChunkActiveList(chunk);
-        /// Now we're gonna compare for differences
-        /// Taking advantage of current cycle being set to negative before this run to do A->B B->A prevention
-        for (BlockPos potential_diffPos  : activeTiles) { //You know, having both chunk list types use AtmosTileEntity would've been nice. Too bad Minecraft refuses to serialize it!
-            AtmosTileEntity potential_diff = (AtmosTileEntity) chunk.getBlockEntity(potential_diffPos); //Cast our Pos to a Tile
-            /// I can't use 0 here, so we're gonna do this instead. If it ever breaks I'll eat my shoe
-            potential_diff.current_cycle = 1;
-            for (Direction direction : Direction.values()){//Loops through all 6 directions to get potential enemies for enemy_tile
-                if (potential_diff.doesAdjTileExist(direction)){ //Makes sure our enemy is a valid tile
-                    AtmosTileEntity enemy_tile = (AtmosTileEntity) chunk.getBlockEntity(potential_diff.getAdjTilePos(direction)); //Cast our enemy_tile from the checked adjacent tile
-                    /// If it's already been processed, then it's already talked to us
-                    if (enemy_tile.current_cycle != -1) {
-                        break;
-                    }
-                    //
-                }
+    public static final Logger LOGGER = LogUtils.getLogger();
+
+    @SubscribeEvent
+    public static void fire(ServerTickEvent.Pre tick) {
+        long time = System.nanoTime();
+        process_active_turfs(tick.getServer().getLevel(OVERWORLD));
+
+        //We NEED to make sure this shit stays under 50ms! Even then, we may need to squeeze a *little* more out, as we aren't the only thing hogging up a single tick.
+        long totalTime = System.nanoTime() - time;
+        if (totalTime > 50_000_000) {
+            LOGGER.error("We took too long to process! Total time taken was {}ms.", totalTime / 1_000_000);
+        }
+    }
+    public static void process_active_turfs(Level level) {
+        for (BlockPos pos : getAllActiveTiles(level)) {
+            if (level.getBlockEntity(pos) instanceof turf_tile tile) {
+                tile.process_cell();
+            } else {
+                LOGGER.warn("Position {} wasn't a tile_turf! Removing this position from the AllList", pos);
             }
         }
+    }
+    public static void remove_from_active(turf_tile tile) {
+        removeFromChunkActiveList((LevelChunk) tile.getLevel().getChunk(tile.getBlockPos()), tile.getBlockPos()); //sorgy
+        tile.setActive(false);
+        //implement line 453-456 in air.dm
     }
 }

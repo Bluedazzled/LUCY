@@ -1,66 +1,70 @@
 package bluedazzled.lucy_atmos.atmospherics.sim;
 
-import bluedazzled.lucy_atmos.atmospherics.AtmosTileEntity;
 import net.minecraft.nbt.CompoundTag;
 
 import static bluedazzled.lucy_atmos.atmospherics.defines.atmos_core.GAS_CONSTANT;
 import static bluedazzled.lucy_atmos.atmospherics.defines.atmos_core.TCMB;
 
 public class gas_mixture {
-
-    public static void updateAll(AtmosTileEntity tile) {
-        tile.gasMix.put("gasses", tile.gasses);
-        updateTotalMoles(tile);
-        updatePressure(tile);
-        updateTileInfo(tile, true);
+    turf_tile tile;
+    public gas_mixture(turf_tile tile) {
+        this.tile = tile;
     }
-    public static void updateTileInfo(AtmosTileEntity tile, boolean update) {
-        tile.tileInfo.put("gasMix", tile.gasMix);
-        tile.tileInfo.put("adjacentTiles", tile.adjacentTiles);
+
+    public void updateAll() {
+        this.tile.gasMix.put("gasses", this.tile.gasses);
+        updateTotalMoles();
+        updatePressure();
+        updateTileInfo(true);
+    }
+    public void updateTileInfo(boolean update) {
+        this.tile.tileInfo.put("gasMix", this.tile.gasMix);
+        this.tile.tileInfo.put("adjacentTiles", this.tile.adjacentTiles);
+        this.tile.tileInfo.putBoolean("active", this.tile.active);
         if (update) {
-            tile.setChanged();
+            this.tile.setChanged();
         }
     }
-    public static void updatePressure(AtmosTileEntity tile) {
-        double totalMoles = tile.gasMix.getDouble("totalMoles");
-        double temperature = tile.gasMix.getDouble("temperature");
-        int volume = tile.gasMix.getInt("volume");
+    public void updatePressure() {
+        double totalMoles = this.tile.gasMix.getDouble("totalMoles");
+        double temperature = this.tile.gasMix.getDouble("temperature");
+        int volume = this.tile.gasMix.getInt("volume");
         double pressure = (totalMoles * GAS_CONSTANT * temperature) / volume;
 
         pressure = Math.round(pressure * 1000.0) / 1000.0;
-        tile.gasMix.putDouble("pressure", pressure);
+        this.tile.gasMix.putDouble("pressure", pressure);
     }
-    public static void updateTotalMoles(AtmosTileEntity tile) {
+    public void updateTotalMoles() {
         double total = 0.0;
-        for (String key : tile.gasses.getAllKeys()) {
-            double gasAmount = tile.gasses.getDouble(key);
+        for (String key : this.tile.gasses.getAllKeys()) {
+            double gasAmount = this.tile.gasses.getDouble(key);
             total += gasAmount;
         }
         total = Math.round(total * 1000.0) / 1000.0;
-        tile.gasMix.putDouble("totalMoles", total);
+        this.tile.gasMix.putDouble("totalMoles", total);
     }
 
-    public static CompoundTag getGasMix(AtmosTileEntity tile) {
-        return tile.gasMix;
+    public CompoundTag getGasMix() {
+        return this.tile.gasMix;
     }
-    public static void addGas(AtmosTileEntity tile, String key, double moles) {
-        tile.gasses.putDouble(key, moles);
-        updateAll(tile);
+    public void addGas(String key, double moles) {
+        this.tile.gasses.putDouble(key, moles);
+        updateAll();
     }
-    public static void removeGas(AtmosTileEntity tile, String key) {
-        tile.gasses.remove(key);
-        updateAll(tile);
-    }
-
-    public static void setTemperature(AtmosTileEntity tile, double temperature) {
-        tile.gasMix.putDouble("temperature", Math.max(temperature, TCMB));
-        updateAll(tile);
-    }
-    public static Double getTemperature(AtmosTileEntity tile) {
-        return tile.gasMix.getDouble("temperature");
+    public void removeGas(String key) {
+        this.tile.gasses.remove(key);
+        updateAll();
     }
 
-    public static Double getPressure(AtmosTileEntity tile) {
-        return tile.gasMix.getDouble("pressure");
+    public void setTemperature(double temperature) {
+        this.tile.gasMix.putDouble("temperature", Math.max(temperature, TCMB));
+        updateAll();
+    }
+    public Double getTemperature() {
+        return this.tile.gasMix.getDouble("temperature");
+    }
+
+    public Double getPressure() {
+        return this.tile.gasMix.getDouble("pressure");
     }
 }
