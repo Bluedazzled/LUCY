@@ -18,7 +18,7 @@ public class EventHandler {
         ItemStack heldItem = player.getMainHandItem();
 
         if (heldItem.getItem() instanceof GasAnalyzer) { //call to gas analyzer
-//            ((GasAnalyzer) heldItem.getItem()).leftClickedBlock(player, event.getLevel(), event.getPos());
+            ((GasAnalyzer) heldItem.getItem()).leftClickedBlock(player, event.getLevel(), event.getPos());
         }
     }
 }
