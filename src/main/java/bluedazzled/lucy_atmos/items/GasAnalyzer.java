@@ -5,7 +5,6 @@ import bluedazzled.lucy_atmos.menus.GasAnaMenu;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -24,21 +23,16 @@ import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 @MethodsReturnNonnullByDefault
 public class GasAnalyzer extends Item {
-    private double temperature;
 
     public GasAnalyzer() {
         super(new Properties()
                 .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MODID, "gas_analyzer")))
-                //.component()
         );
     }
     @Override
     public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
         //sword behavior ahh
         return !player.isCreative();
-    }
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
     }
 
     public void leftClickedBlock(ServerPlayer player, Level level, BlockPos pos) {
@@ -51,9 +45,7 @@ public class GasAnalyzer extends Item {
                         Component.translatable("menu.title.lucy_atmos.gasanamenu")
                 ));
             } else {
-                if (blockent instanceof turf_tile atmosTile) { //This entire function is, essentially, disabled. Entirely.
-//                    atmosTile.setTemperature(this.temperature);
-                }
+                //write data
             }
         }
     }
@@ -71,20 +63,12 @@ public class GasAnalyzer extends Item {
             return super.useOn(context);
         }
         BlockEntity blockent = level.getBlockEntity(blockpos);
-        if (!(blockent instanceof turf_tile atmosTile)) {
+        if (!(blockent instanceof turf_tile atmosTile)) { //we aren't a tile, fuck off!
             return InteractionResult.PASS;
         }
 
-        CompoundTag gasMix = atmosTile.gas_mixture.getGasMix();
-        CompoundTag gasses = gasMix.getCompound("gasses");
-
         if (player instanceof ServerPlayer serverPlayer) {
-            serverPlayer.sendSystemMessage(Component.literal("temperature: " + gasMix.getDouble("temperature") + "K"));
-            serverPlayer.sendSystemMessage(Component.literal("total moles: " + gasMix.getDouble("totalMoles")));
-            serverPlayer.sendSystemMessage(Component.literal("pressure: " + gasMix.getDouble("pressure") + "kPa"));
-            for (String key : gasses.getAllKeys()) {
-                serverPlayer.sendSystemMessage(Component.literal(key + ": " + gasses.getDouble(key) + " moles"));
-            }
+            //read all of the data and print it
         }
         return InteractionResult.SUCCESS;
     }

@@ -98,12 +98,6 @@ public class Registration {
                     .serialize(Codec.list(BLOCKPOS_CODEC))
                     .build()
     );
-    public static final Supplier<AttachmentType<List<BlockPos>>> CHUNK_ACTIVETILES = ATTACHMENT_TYPES.register(
-            "chunk_activetiles", () -> AttachmentType
-                    .<List<BlockPos>>builder(() -> new ArrayList<>())
-                    .serialize(Codec.list(BLOCKPOS_CODEC))
-                    .build()
-    );
     public static final Supplier<AttachmentType<List<ChunkPos>>> GLOBAL_TILECHUNKS = ATTACHMENT_TYPES.register(
             "global_tilechunks", () -> AttachmentType
                     .<List<ChunkPos>>builder(() -> new ArrayList<>())

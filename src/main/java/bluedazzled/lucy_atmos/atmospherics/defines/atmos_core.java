@@ -91,4 +91,18 @@ public final class atmos_core {
     public static final double WINDOW_HEAT_TRANSFER_COEFFICIENT = 0.1; //See WALL_HEAT_TRANSFER_COEFFICIENT
     /// a hack to help make vacuums "cold", sacrificing realism for gameplay
     public static final double HEAT_CAPACITY_VACUUM = 7000;
+
+
+    /// Air "sub"system subtasks
+    //Holy shit, there's only 7 of these. Barely fits in a byte. Awesome!
+    public static final byte SSAIR_PIPENETS = 1;
+    public static final byte SSAIR_ATMOSMACHINERY = 2;
+    public static final byte SSAIR_ACTIVETURFS = 3;
+    public static final byte SSAIR_HOTSPOTS = 4;
+    public static final byte SSAIR_EXCITEDGROUPS = 5;
+    public static final byte SSAIR_HIGHPRESSURE = 6;
+    public static final byte SSAIR_PROCESS_ATMOS = 7;
+    // For our hellish stupid fucking stupid maps grr
+    public static final int MOLES = 0;
+    public static final int ARCHIVE = 1;
 }

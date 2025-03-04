@@ -35,8 +35,11 @@ public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
                 64, 16,
                 Component.literal("")); //default to empty
         //temperature button
-        this.addRenderableWidget(Button.builder(Component.literal("setTemp"), button -> {onButtonPressed();})
+        this.addRenderableWidget(Button.builder(Component.literal("setTemp"), button -> {tempButton();})
                 .bounds(this.leftPos + 32, this.topPos + 112, 64, 16)
+                .build());
+        //clear gasses button
+        this.addRenderableWidget(Button.builder(Component.literal("clear gasses"), button -> {clearGasses();})
                 .build());
         //wtf did i add this for again?
         this.addRenderableWidget(box);
@@ -66,7 +69,7 @@ public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
                 256, 256);
     }
 
-    private void onButtonPressed(){
+    private void tempButton(){
         this.minecraft.player.displayClientMessage(Component.literal(this.box.getValue()), false);
         try {
             PacketDistributor.sendToServer(new GasAnaPacket(Double.parseDouble(this.box.getValue())));
@@ -74,7 +77,9 @@ public class GasAnaScreen extends AbstractContainerScreen<GasAnaMenu> {
             PacketDistributor.sendToServer(new GasAnaPacket(T20C)); //sets the default to T20C
         }
     }
-
+    private void clearGasses() {
+        PacketDistributor.sendToServer(new GasAnaPacket(-1));
+    }
     @Override
     public void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         //Draw the string once I get the gui base done (sike bitch using placehgolder for now :3)
