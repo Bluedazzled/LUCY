@@ -74,32 +74,29 @@ public class GasAnalyzer extends Item {
         double heatCapacity = mixture.heat_capacity();
         double thermal_energy = mixture.thermal_energy();
         //705 scanners.dm
-        ArrayList<String> message = new ArrayList<>();
-        message.add("--------RESULTS-------");
+        player.sendSystemMessage(Component.literal("--------RESULTS-------"));
         if (totalMoles > 0) {
-            message.add(String.format("Moles: %smol", doubleToString(Math.round(totalMoles*1000d)/1000d)));
-            message.add(String.format("Volume: %sL", doubleToString(volume)));
-            message.add(String.format("Pressure: %skPa", doubleToString(Math.round(pressure*1000d)/1000d)));
-            message.add(String.format("Heat Capacity: %s", displayJoules(heatCapacity)));
-            message.add(String.format("Thermal Energy: %s", displayJoules(thermal_energy)));
-            for (Map.Entry<String, double[]> entry : mixture.getGases().entrySet()){
-                double concentration = entry.getValue()[MOLES]/totalMoles;
-                message.add(String.format("%s: %s%% %s mol",
+            player.sendSystemMessage(Component.literal("Moles: %smol".formatted(formatNum(totalMoles))));
+            player.sendSystemMessage(Component.literal("Volume: %sL".formatted(formatNum(volume))));
+            player.sendSystemMessage(Component.literal("Pressure: %skPa".formatted(formatNum(pressure))));
+            player.sendSystemMessage(Component.literal("Heat Capacity: %s".formatted(displayJoules(heatCapacity))));
+            player.sendSystemMessage(Component.literal("Thermal Energy: %s".formatted(displayJoules(thermal_energy))));
+            for (Map.Entry<String, double[]> entry : mixture.getGases().entrySet()) {
+                double concentration = entry.getValue()[MOLES] / totalMoles;
+                player.sendSystemMessage(Component.literal("%s: %s%% %s mol".formatted(
                         gas_types.getGas(entry.getKey()).getName(),
-                        doubleToString(Math.round(concentration*100d)*100d/100d),
-                        doubleToString(Math.round(totalMoles*1000d)/1000d)
-                        ));
+                        formatNum(concentration * 100),
+                        formatNum(entry.getValue()[MOLES])
+                )));
             }
-            message.add(String.format("Temperature: %s°C (%sK)",
-                    doubleToString(Math.round((temperature - T0C)*1000d)/1000d),
-                    doubleToString(Math.round(temperature*1000d)/1000d)));
-        } else message.add("VACUUM. SORRY!");
-        message.add("----------END---------");
-        for (String text : message) {
-            player.sendSystemMessage(Component.literal(text));
-        }
+            player.sendSystemMessage(Component.literal("Temperature: %s°C (%sK)".formatted(
+                    formatNum(temperature - T0C),
+                    formatNum(temperature)
+            )));
+        } else player.sendSystemMessage(Component.literal("VACUUM. SORRY!"));
+        player.sendSystemMessage(Component.literal("----------END---------"));
     }
-    String doubleToString(double number) {
-        return Double.toString(number).replaceAll("\\.?0+$", "");
+    private String formatNum(double num) {
+        return num % 1 == 0 ? String.format("%.0f", num) : String.format("%.2f", num);
     }
 }
