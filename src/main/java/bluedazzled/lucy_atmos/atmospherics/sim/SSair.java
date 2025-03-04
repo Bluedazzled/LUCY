@@ -28,6 +28,8 @@ public class SSair {
 
     static ArrayList<Object> currentrun = new ArrayList<>(); //This surely won't go wrong!
     static byte currentpart = SSAIR_PIPENETS;
+
+    static long times_fired;
 //endregion
     @SubscribeEvent
     public static void fire(ServerTickEvent.Pre tick) {
@@ -39,6 +41,7 @@ public class SSair {
         long time = System.nanoTime();
         //PIPENETS
         //MACHINERY
+        process_active_turfs();
         //ACTIVE TURFS
         //HOTSPOTS (i think fire, like the light or whatever)
         //EXCITED GROUPS ^^
@@ -50,6 +53,12 @@ public class SSair {
             LOGGER.error("We took too long to process! Total time taken was {}ms.", totalTime / 1_000_000);
         }
         lastTick = currentTick;
+    }
+
+    static void process_active_turfs() {
+        for (turf_tile tile : active_turfs) {
+            tile.process_cell(times_fired);
+        }
     }
 
     public static void remove_from_active(turf_tile tile) {}

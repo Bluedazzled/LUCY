@@ -31,8 +31,8 @@ public class turf_tile extends BlockEntity {
 
     ///used to determine whether we should archive
     //*Pretty* sure these are for the subsystem system for BYOND which we aren't fucking using thank you very much
-    int archived_cycle = 0;
-    int current_cycle = 0;
+    long archived_cycle = 0;
+    long current_cycle = 0;
 
     ///How hot the turf is, in kelvin
     double temperature = T20C;
@@ -82,7 +82,7 @@ public class turf_tile extends BlockEntity {
 
 //endregion
 //region Simulation
-    void process_cell(int fire_count) { //The MEAT
+    void process_cell(long fire_count) { //The MEAT
         SSair.remove_from_active(this);
 
         if(archived_cycle < fire_count) {
