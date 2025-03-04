@@ -45,31 +45,35 @@ public class gas_mixture {
     }
 //region listmos/Returns
     //Completely ditching the old listmos system. Whatever the fuck they were smoking I ain't.
-    boolean hasGas(String gasId) {
+    public boolean hasGas(String gasId) {
         return hasGas(gasId, 0);
     }
-    boolean hasGas(String gasId, double amount) {
+    public boolean hasGas(String gasId, double amount) {
         gases.computeIfAbsent(gasId, k -> new double[2]);
         return amount < gases.get(gasId)[MOLES];
     }
-    double heat_capacity() {
+    public void addGas(String gasId, double amount) {
+        gases.computeIfAbsent(gasId, k -> new double[2]);
+        gases.get(gasId)[MOLES] = amount;
+    }
+    public double heat_capacity() {
         double heatCapacity = 0;
         for (String id : gases.keySet()) {
             heatCapacity += gas_types.getGas(id).getSpecific_heat();
         }
         return heatCapacity;
     }
-    double total_moles() {
+    public double total_moles() {
         return total_moles(MOLES);
     }
-    double total_moles(int data) {
+    public double total_moles(int data) {
         double moles = 0;
         for (Map.Entry<String, double[]> entry : gases.entrySet()) {
             moles += entry.getValue()[data];
         }
         return moles;
     }
-    double getPressure() {
+    public double getPressure() {
         //It should never be negative anyways. That would be fucking wild...
         if (Math.abs(volume) != 0) {
             return total_moles() * GAS_CONSTANT * temperature / volume;
@@ -77,13 +81,19 @@ public class gas_mixture {
         LOGGER.warn("YO! Tile at {} just tried to return pressure with negative or 0 volume!", tile.getBlockPos());
         return 0;
     }
-    double getTemperature() {
+    public double getTemperature() {
         return temperature;
     }
-    double getTemperature_archived() {
+    public double getVolume() {
+        return volume;
+    }
+    public Map<String, double[]> getGases() {
+        return gases;
+    }
+    public double getTemperature_archived() {
         return temperature_archived;
     }
-    double thermal_energy() {
+    public double thermal_energy() {
         return (getTemperature() * heat_capacity());
     }
     void archive() {
@@ -243,4 +253,5 @@ public class gas_mixture {
         }
         return "";
     }
+//endregion
 }
