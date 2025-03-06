@@ -23,7 +23,7 @@ import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 public class OverlayRenderer implements BlockEntityRenderer<turf_tile> {
     private static final Logger log = LoggerFactory.getLogger(OverlayRenderer.class); //Blockstates are a work of art. This. This is bullshit.
     public OverlayRenderer(BlockEntityRendererProvider.Context context) {
-//        context.getBlockEntityRenderDispatcher().level.getBlockEntity() //TODO: get our pos. somehow. i swear we can utilize the level... maybe not...
+
     }
     private static final ResourceLocation PLASMA_OVERLAY = ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlay/plasma");
 
@@ -36,7 +36,7 @@ public class OverlayRenderer implements BlockEntityRenderer<turf_tile> {
     // - packedLight:   The light value of the block entity.
     // - packedOverlay: The current overlay value of the block entity, usually OverlayTexture.NO_OVERLAY.
     @Override
-    public void render(turf_tile blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+    public void render(turf_tile tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         VertexConsumer buffer = bufferSource.getBuffer(RenderType.text(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png")));
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);

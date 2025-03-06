@@ -72,7 +72,7 @@ public class turf_tile extends BlockEntity {
         gas_mixture mix = new gas_mixture(this, TILE_VOLUME); //todo: parse default gas string
         mix.addGas("oxygen", MOLES_O2STANDARD);
         mix.addGas("nitrogen", MOLES_N2STANDARD);
-        mix.temperature = T20C;
+        mix.temperature = temperature;
         ///accounts for changes in temperature
         //todo: 79-82
         return mix;

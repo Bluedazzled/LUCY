@@ -2,6 +2,13 @@
   "item.lucy_atmos.gas_analyzer": "Gas Analyzer",
   "item.lucy_atmos.markiplier": "hello everybody my name is markiplier and welcome to five nights at freddies hor hor hor hor hor",
   "item.lucy_atmos.atmos_tile_block": "atmos tile block",
+
   "block.lucy_atmos.markiplier": "hello everybody my name is markiplier and welcome to five nights at freddies hor hor hor hor hor",
-  "block.lucy_atmos.atmos_tile_block": "atmos tile block"
+  "block.lucy_atmos.atmos_tile_block": "atmos tile block",
+
+  "lucy_atmos.configuration.section.lucy.atmos.client.toml": "LUCY Client Config",
+  "lucy_atmos.configuration.section.lucy.atmos.client.toml.title": "LUCY Client Config",
+  "lucy_atmos.configuration.title": "LUCY Configuration",
+  "lucy_atmos.configuration.debug_renderer.tooltip": "Enables the debug rendering overlay.",
+  "lucy_atmos.configuration.debug_renderer": "Debug Renderer"
 }
