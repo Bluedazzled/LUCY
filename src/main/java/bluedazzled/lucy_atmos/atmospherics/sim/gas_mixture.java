@@ -78,7 +78,7 @@ public class gas_mixture {
         if (Math.abs(volume) != 0) {
             return total_moles() * GAS_CONSTANT * temperature / volume;
         }
-        LOGGER.warn("YO! Tile at {} just tried to return pressure with negative or 0 volume!", tile.getBlockPos());
+        LOGGER.warn("YO! Tile at {} just tried to return pressure with negative or 0 volume!", tile.getOnPos());
         return 0;
     }
     public double getTemperature() {

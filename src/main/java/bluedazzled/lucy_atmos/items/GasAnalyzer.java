@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static bluedazzled.lucy_atmos.Registration.ATMOS_TILE_BLOCK;
 import static bluedazzled.lucy_atmos.atmospherics.defines.LilMaths.*;
 import static bluedazzled.lucy_atmos.atmospherics.defines.atmos_core.*;
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
@@ -42,28 +41,28 @@ public class GasAnalyzer extends Item {
         );
     }
 
-    @Override
-    public InteractionResult useOn(UseOnContext context) {
-        Level level = context.getLevel();
-        if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
-        }
-        Player player = context.getPlayer();
-        BlockPos blockpos = context.getClickedPos();
-        BlockState state = level.getBlockState(blockpos);
-        if(!state.is(ATMOS_TILE_BLOCK)) {
-            return super.useOn(context);
-        }
-        BlockEntity blockent = level.getBlockEntity(blockpos);
-        if (!(blockent instanceof turf_tile atmosTile)) { //we aren't a tile, fuck off!
-            return InteractionResult.PASS;
-        }
-
-        if (player instanceof ServerPlayer serverPlayer) {
-            scanTile(atmosTile, serverPlayer);
-        }
-        return InteractionResult.SUCCESS;
-    }
+//    @Override
+//    public InteractionResult useOn(UseOnContext context) {
+//        Level level = context.getLevel();
+//        if (level.isClientSide) {
+//            return InteractionResult.SUCCESS;
+//        }
+//        Player player = context.getPlayer();
+//        BlockPos blockpos = context.getClickedPos();
+//        BlockState state = level.getBlockState(blockpos);
+//        if(!state.is(ATMOS_TILE_BLOCK)) {
+//            return super.useOn(context);
+//        }
+//        BlockEntity blockent = level.getBlockEntity(blockpos);
+//        if (!(blockent instanceof turf_tile atmosTile)) { //we aren't a tile, fuck off!
+//            return InteractionResult.PASS;
+//        }
+//
+//        if (player instanceof ServerPlayer serverPlayer) {
+//            scanTile(atmosTile, serverPlayer);
+//        }
+//        return InteractionResult.SUCCESS;
+//    }
 
     void scanTile(turf_tile tile, ServerPlayer player) {
         gas_mixture mixture = tile.return_air();

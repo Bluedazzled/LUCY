@@ -4,6 +4,7 @@ import bluedazzled.lucy_atmos.atmospherics.OverlayRenderer;
 import bluedazzled.lucy_atmos.menus.GasAnaScreen;
 import bluedazzled.lucy_atmos.networking.GasAnaPacket;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -52,7 +53,7 @@ public class lucy_atmos {
         modBus.addListener(this::registerConfig);
     }
     private void commonSetup(final FMLCommonSetupEvent event) {
-        BlockEntityRenderers.register(Registration.ATMOS_TILE_ENTITY.get(), OverlayRenderer::new);
+        EntityRenderers.register(Registration.TURF_TILE.get(), OverlayRenderer::new);
     }
     private void registerAtlas(final RegisterMaterialAtlasesEvent event) {
         event.register(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png"), ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlays"));

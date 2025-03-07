@@ -2,22 +2,24 @@ package bluedazzled.lucy_atmos.atmospherics.sim;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static bluedazzled.lucy_atmos.Registration.ATMOS_TILE_ENTITY;
 import static bluedazzled.lucy_atmos.atmospherics.defines.atmos_core.*;
 import static java.lang.Double.POSITIVE_INFINITY;
 
 @ParametersAreNonnullByDefault
-public class turf_tile extends BlockEntity {
+public class turf_tile extends Entity {
 //region Variables
     // /turf (LINDA_tile_turf.dm AND turf.dm
     ///used for temperature calculations in superconduction
@@ -59,12 +61,33 @@ public class turf_tile extends BlockEntity {
     int significant_share_ticker = 0;
     //46-51
 //endregion
-    public turf_tile(BlockPos pos, BlockState state) {
-        super(ATMOS_TILE_ENTITY.get(), pos, state);
+    public turf_tile(EntityType<turf_tile> tile, Level level) {
+        super(tile, level);
         air = create_gas_mixture(); //todo: just move the entirety of create_gas_mixture() up here
         //todo: 57-60
     }
 
+//region stupid entity stuff
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+
+    }
+
+    @Override
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource damageSource, float v) {
+        return false;
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compoundTag) {
+
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compoundTag) {
+
+    }
+//endregion
 //region Gas mixture methods
     ///Copies all gas info from the turf into a new gas_mixture, along with our temperature
     ///Returns the create gas_mixture
@@ -158,29 +181,9 @@ public class turf_tile extends BlockEntity {
         }
     }
 //endregion
-//region saving/loading
-    @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-    }
-
-    @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-    }
-
-    @Override
-    public void onLoad() {
-        super.onLoad();
-    }
-    @Override
-    public void setRemoved() {
-        super.setRemoved();
-    }
-//endregion
 //region spacewind
     void consider_pressure_difference(turf_tile target_turf, double difference) {
-        BlockPos diff = target_turf.getBlockPos().subtract(this.getBlockPos());
+        BlockPos diff = target_turf.getOnPos().subtract(this.getOnPos());
         SSair.high_pressure_delta.add(this);
         if (difference > pressure_difference) {
             pressure_direction = Direction.getApproximateNearest((float)diff.getX(), (float)diff.getY(), (float)diff.getZ());
