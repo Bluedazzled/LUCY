@@ -113,4 +113,5 @@ public class Registration {
         BLOCK_ENTITY_TYPES.register(modEventBus);
         MENUS.register(modEventBus);
     }
+
 }

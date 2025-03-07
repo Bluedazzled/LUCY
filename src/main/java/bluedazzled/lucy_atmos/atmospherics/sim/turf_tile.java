@@ -46,7 +46,7 @@ public class turf_tile extends BlockEntity {
     ///Excited group we are part of
     excitedGroup excitedGroup;
     ///Are we active?
-    boolean excited = false;
+    public boolean excited = false;
     ///Our gas mix
     gas_mixture air;
     ///air will slowly revert to initial_gas_mix

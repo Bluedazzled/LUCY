@@ -1,6 +1,7 @@
 package bluedazzled.lucy_atmos.atmospherics;
 
 import bluedazzled.lucy_atmos.atmospherics.sim.turf_tile;
+import bluedazzled.lucy_atmos.LucyConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -26,6 +27,8 @@ public class OverlayRenderer implements BlockEntityRenderer<turf_tile> {
 
     }
     private static final ResourceLocation PLASMA_OVERLAY = ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlay/plasma");
+    private static final ResourceLocation EXCITED = ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlay/excited");
+    private static final ResourceLocation UNEXCITED = ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlay/unexcited");
 
 
     // This method is called every frame in order to render the block entity. Parameters are:
@@ -42,9 +45,20 @@ public class OverlayRenderer implements BlockEntityRenderer<turf_tile> {
         poseStack.translate(0.5, 0.5, 0.5);
         float scale = 0.5f;
         int opacity = 128;
-
-        for (Direction direction : Direction.values()) { //TODO: implement getValidAdjTile() once the first TODO is done
-            renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, direction, opacity);
+        if (LucyConfig.getDebugRenderer()) {
+            if (tile.excited) {
+                for (Direction direction : Direction.values()) {
+                    renderQuad(poseStack, buffer, scale, EXCITED, direction, opacity);
+                }
+            } else {
+                for (Direction direction : Direction.values()) {
+                    renderQuad(poseStack, buffer, scale, UNEXCITED, direction, opacity);
+                }
+            }
+        } else {
+            for (Direction direction : Direction.values()) { //TODO: implement getValidAdjTile() once the first TODO is done
+                renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, direction, opacity);
+            }
         }
         poseStack.popPose();
     }

@@ -8,10 +8,12 @@ public class LucyConfig extends ConfigSpec {
     public static final LucyConfig CONFIG;
     public static final ModConfigSpec CONFIG_SPEC;
 
-    public final ModConfigSpec.ConfigValue<Boolean> debugRenderer;
+    private final ModConfigSpec.ConfigValue<Boolean> DEBUG_RENDERER;
+    private static boolean debugRenderer;
 
     private LucyConfig(ModConfigSpec.Builder builder) {
-        debugRenderer = builder.define("debug_renderer", false);
+        super();
+        DEBUG_RENDERER = builder.define("debug_renderer", false);
     }
 
     static {
@@ -20,5 +22,13 @@ public class LucyConfig extends ConfigSpec {
 
         CONFIG = pair.getLeft();
         CONFIG_SPEC = pair.getRight();
+    }
+
+    public void updateCache() {
+        debugRenderer = DEBUG_RENDERER.get();
+    }
+
+    public static boolean getDebugRenderer() {
+        return debugRenderer;
     }
 }
