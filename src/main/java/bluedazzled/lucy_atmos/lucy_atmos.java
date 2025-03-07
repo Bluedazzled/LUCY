@@ -1,9 +1,8 @@
 package bluedazzled.lucy_atmos;
 
-import bluedazzled.lucy_atmos.atmospherics.OverlayRenderer;
+import bluedazzled.lucy_atmos.rendering.TileRenderer;
 import bluedazzled.lucy_atmos.menus.GasAnaScreen;
 import bluedazzled.lucy_atmos.networking.GasAnaPacket;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -12,7 +11,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMaterialAtlasesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
@@ -53,7 +51,7 @@ public class lucy_atmos {
         modBus.addListener(this::registerConfig);
     }
     private void commonSetup(final FMLCommonSetupEvent event) {
-        EntityRenderers.register(Registration.TURF_TILE.get(), OverlayRenderer::new);
+        EntityRenderers.register(Registration.TURF_TILE.get(), TileRenderer::new);
     }
     private void registerAtlas(final RegisterMaterialAtlasesEvent event) {
         event.register(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png"), ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlays"));
