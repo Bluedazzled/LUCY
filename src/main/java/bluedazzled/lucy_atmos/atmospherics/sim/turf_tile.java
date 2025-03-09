@@ -1,18 +1,29 @@
 package bluedazzled.lucy_atmos.atmospherics.sim;
 
+import bluedazzled.lucy_atmos.items.GasAnalyzer;
+import com.mojang.math.Axis;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Objects;
 
 import static bluedazzled.lucy_atmos.atmospherics.defines.atmos_core.*;
@@ -66,7 +77,6 @@ public class turf_tile extends Entity {
         air = create_gas_mixture(); //todo: just move the entirety of create_gas_mixture() up here
         //todo: 57-60
     }
-
 //region stupid entity stuff
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
@@ -86,6 +96,16 @@ public class turf_tile extends Entity {
     @Override
     protected void addAdditionalSaveData(CompoundTag compoundTag) {
 
+    }
+    @Override
+    public void onAddedToLevel() {
+        super.onAddedToLevel();
+        BlockPos pos = this.blockPosition();
+        this.setPos(pos.getX()+.5, pos.getY(), pos.getZ()+.5);
+    }
+    @Override
+    public boolean isPickable() {
+        return false;
     }
 //endregion
 //region Gas mixture methods

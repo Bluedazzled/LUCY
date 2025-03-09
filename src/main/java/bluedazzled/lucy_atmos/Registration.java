@@ -59,7 +59,8 @@ public class Registration {
     //entities
     public static final Supplier<EntityType<turf_tile>> TURF_TILE = ENTITIES.register(
             "turf_tile",
-            () -> EntityType.Builder.of(turf_tile::new, MobCategory.MISC).sized(1f,1f)
+            () -> EntityType.Builder.of(turf_tile::new, MobCategory.MISC)
+                    .sized(1f,1f)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(MODID,"turf_tile"))
             )
         );

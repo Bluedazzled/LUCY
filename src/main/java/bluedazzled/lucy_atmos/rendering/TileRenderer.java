@@ -32,7 +32,7 @@ public class TileRenderer extends EntityRenderer<turf_tile, TileRenderState> {
     }
 
     @Override
-    public TileRenderState createRenderState() { //Holy shit, this is a nothing burger. Where the fuck is all my data?
+    public TileRenderState createRenderState() {
         return new TileRenderState();
     }
 
@@ -40,7 +40,7 @@ public class TileRenderer extends EntityRenderer<turf_tile, TileRenderState> {
         super.render(tile, poseStack, bufferSource, packedLight);
         VertexConsumer buffer = bufferSource.getBuffer(RenderType.text(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png")));
         poseStack.pushPose();
-        poseStack.translate(0.5, 0.5, 0.5);
+        poseStack.translate(0, 0.5, 0);
         float scale = 0.5f;
         int opacity = 128;
         for (Direction direction : Direction.values()) { //TODO: implement getValidAdjTile() once the first TODO is done

@@ -3,11 +3,9 @@ package bluedazzled.lucy_atmos.items;
 import bluedazzled.lucy_atmos.atmospherics.defines.gas_types;
 import bluedazzled.lucy_atmos.atmospherics.sim.gas_mixture;
 import bluedazzled.lucy_atmos.atmospherics.sim.turf_tile;
-import bluedazzled.lucy_atmos.atmospherics.defines.LilMaths;
-import bluedazzled.lucy_atmos.menus.GasAnaMenu;
 import com.mojang.logging.LogUtils;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -15,18 +13,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static bluedazzled.lucy_atmos.atmospherics.defines.LilMaths.*;
 import static bluedazzled.lucy_atmos.atmospherics.defines.atmos_core.*;
@@ -41,28 +40,39 @@ public class GasAnalyzer extends Item {
         );
     }
 
-//    @Override
-//    public InteractionResult useOn(UseOnContext context) {
-//        Level level = context.getLevel();
-//        if (level.isClientSide) {
-//            return InteractionResult.SUCCESS;
-//        }
-//        Player player = context.getPlayer();
-//        BlockPos blockpos = context.getClickedPos();
-//        BlockState state = level.getBlockState(blockpos);
-//        if(!state.is(ATMOS_TILE_BLOCK)) {
-//            return super.useOn(context);
-//        }
-//        BlockEntity blockent = level.getBlockEntity(blockpos);
-//        if (!(blockent instanceof turf_tile atmosTile)) { //we aren't a tile, fuck off!
-//            return InteractionResult.PASS;
-//        }
-//
-//        if (player instanceof ServerPlayer serverPlayer) {
-//            scanTile(atmosTile, serverPlayer);
-//        }
-//        return InteractionResult.SUCCESS;
-//    }
+    @Override
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (level.isClientSide) return InteractionResult.PASS;
+        Vec3 start = player.getEyePosition(1f);
+        Vec3 end = start.add(player.getLookAngle().scale(1f));
+        AABB rayAABB = new AABB(start, end).inflate(.1);
+        List<Entity> entities = level.getEntities(player, rayAABB, entity -> entity instanceof turf_tile);
+        EntityHitResult closestHit = null;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (Entity entity : entities) {
+            AABB entityAABB = entity.getBoundingBox();
+            Optional<Vec3> intersection = entityAABB.clip(start, end); // Check if the ray hits the entity
+
+            if (intersection.isPresent()) {
+                double distance = start.distanceTo(intersection.get());
+
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestHit = new EntityHitResult(entity, intersection.get());
+                }
+            }
+        }
+        if (closestHit != null) {
+            Entity hitEntity = closestHit.getEntity();
+
+            if (hitEntity instanceof turf_tile tile) {
+                scanTile(tile, (ServerPlayer) player);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return InteractionResult.PASS;
+    }
 
     void scanTile(turf_tile tile, ServerPlayer player) {
         gas_mixture mixture = tile.return_air();
