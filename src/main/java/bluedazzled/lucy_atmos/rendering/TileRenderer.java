@@ -1,34 +1,58 @@
 package bluedazzled.lucy_atmos.rendering;
 
+import bluedazzled.lucy_atmos.LucyConfig;
 import bluedazzled.lucy_atmos.atmospherics.sim.turf_tile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import org.joml.Matrix4f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
-
+@MethodsReturnNonnullByDefault
 public class TileRenderer extends EntityRenderer<turf_tile, TileRenderState> {
     private static final Logger log = LoggerFactory.getLogger(TileRenderer.class);
 
     private static final ResourceLocation PLASMA_OVERLAY = ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlay/plasma");
     private static final ResourceLocation EXCITED = ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlay/excited");
     private static final ResourceLocation UNEXCITED = ResourceLocation.fromNamespaceAndPath(MODID, "gasoverlay/unexcited");
+    private turf_tile tile;
 
     public TileRenderer(EntityRendererProvider.Context context) {
         super(context);
+    }
+
+
+    public void render(TileRenderState tileState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+        super.render(tileState, poseStack, bufferSource, packedLight);
+        VertexConsumer buffer = bufferSource.getBuffer(RenderType.text(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png")));
+        poseStack.pushPose();
+        poseStack.translate(0, 0.5, 0);
+        float scale = 0.5f;
+        int opacity = 128;
+
+        for (Direction direction : Direction.values()) {
+            if (LucyConfig.getDebugRenderer()) {
+                if (tile.excited) renderQuad(poseStack, buffer, scale, EXCITED, direction, opacity);
+                else renderQuad(poseStack, buffer, scale, UNEXCITED, direction, opacity);
+            } else renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, direction, opacity);
+        }
+        poseStack.popPose();
     }
 
     @Override
@@ -36,21 +60,9 @@ public class TileRenderer extends EntityRenderer<turf_tile, TileRenderState> {
         return new TileRenderState();
     }
 
-    public void render(TileRenderState tile, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        super.render(tile, poseStack, bufferSource, packedLight);
-        VertexConsumer buffer = bufferSource.getBuffer(RenderType.text(ResourceLocation.fromNamespaceAndPath(MODID, "textures/atlas/gasoverlays.png")));
-        poseStack.pushPose();
-        poseStack.translate(0, 0.5, 0);
-        float scale = 0.5f;
-        int opacity = 128;
-        for (Direction direction : Direction.values()) { //TODO: implement getValidAdjTile() once the first TODO is done
-            renderQuad(poseStack, buffer, scale, PLASMA_OVERLAY, direction, opacity);
-        }
-        poseStack.popPose();
-    }
-
     public void extractRenderState(turf_tile tile, TileRenderState state, float partialTick) {
         super.extractRenderState(tile, state, partialTick);
+        this.tile = tile;
     }
 
     private void renderQuad(PoseStack poseStack, VertexConsumer buffer, float scale, ResourceLocation texture, Direction direction, int opacity) {
