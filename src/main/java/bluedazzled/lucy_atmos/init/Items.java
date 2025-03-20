@@ -14,8 +14,6 @@ import static bluedazzled.lucy_atmos.init.Blocks.*;
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 public class Items {
-    private Items() {}
-
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
 
     public static final DeferredItem<Item> MARKIPLIER_ITEM = ITEMS.register("markiplier",

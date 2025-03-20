@@ -28,19 +28,19 @@ public class lucy_atmos {
     public static final String MODID = "lucy_atmos";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public lucy_atmos(IEventBus modBus, ModContainer container) {
+    public lucy_atmos(IEventBus bus, ModContainer container) {
         //todo: fucking reorganize this wtf?
         container.registerConfig(ModConfig.Type.CLIENT, CONFIG_SPEC);
-        modBus.addListener(this::registerConfig);
+        bus.addListener(this::registerConfig);
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
-        modBus.addListener(Blocks::registerBlocks);
-        modBus.addListener(Menus::registerMenus);
-        modBus.addListener(Menus::registerScreens);
-        modBus.addListener(Items::registerHandlers);
-        modBus.addListener(Entities::registerEntities);
-        modBus.addListener(Payloads::registerPayloads);
-        modBus.addListener(Atlasses::registerAtlasses);
-        modBus.addListener(this::commonSetup);
+        Blocks.registerBlocks(bus);
+        Menus.registerMenus(bus);
+        bus.addListener(Menus::registerScreens);
+        Items.registerHandlers(bus);
+        Entities.registerEntities(bus);
+        bus.addListener(Payloads::registerPayloads);
+        bus.addListener(Atlasses::registerAtlasses);
+        bus.addListener(this::commonSetup);
     }
     private void commonSetup(final FMLCommonSetupEvent event) {
         EntityRenderers.register(TURF_TILE.get(), TileRenderer::new);

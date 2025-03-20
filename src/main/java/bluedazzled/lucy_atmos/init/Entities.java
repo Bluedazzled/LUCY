@@ -14,7 +14,6 @@ import java.util.function.Supplier;
 import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 
 public class Entities {
-
     public static final DeferredRegister<EntityType<?>> ENTITIES =
             DeferredRegister.create(Registries.ENTITY_TYPE, MODID);
     public static final Supplier<EntityType<turf_tile>> TURF_TILE = ENTITIES.register(
