@@ -1,4 +1,4 @@
-package bluedazzled.lucy_atmos.rendering;
+package bluedazzled.lucy_atmos.client.rendering;
 
 import bluedazzled.lucy_atmos.LucyConfig;
 import bluedazzled.lucy_atmos.atmospherics.sim.turf_tile;
@@ -12,12 +12,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
 import org.joml.Matrix4f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

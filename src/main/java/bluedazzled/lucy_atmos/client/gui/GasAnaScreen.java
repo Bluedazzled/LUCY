@@ -1,4 +1,4 @@
-package bluedazzled.lucy_atmos.menus;
+package bluedazzled.lucy_atmos.client.gui;
 
 import bluedazzled.lucy_atmos.networking.GasAnaPacket;
 import net.minecraft.client.Minecraft;

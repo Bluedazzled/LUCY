@@ -10,5 +10,8 @@
   "lucy_atmos.configuration.section.lucy.atmos.client.toml.title": "LUCY Client Config",
   "lucy_atmos.configuration.title": "LUCY Configuration",
   "lucy_atmos.configuration.debug_renderer.tooltip": "Enables the debug rendering overlay.",
-  "lucy_atmos.configuration.debug_renderer": "Debug Renderer"
+  "lucy_atmos.configuration.debug_renderer": "Debug Renderer",
+
+  "key.category.lucy": "LUCY",
+  "key.lucy_atmos.inhand": "In Hand Interact"
 }

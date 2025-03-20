@@ -5,7 +5,6 @@ import bluedazzled.lucy_atmos.atmospherics.sim.gas_mixture;
 import bluedazzled.lucy_atmos.atmospherics.sim.turf_tile;
 import com.mojang.logging.LogUtils;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -19,7 +18,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
 
@@ -34,12 +32,13 @@ import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
 @MethodsReturnNonnullByDefault
 public class GasAnalyzer extends Item {
     private static final Logger LOGGER = LogUtils.getLogger();
+    private double temperature;
     public GasAnalyzer() {
         super(new Properties()
                 .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MODID, "gas_analyzer")))
         );
     }
-
+    public void setTemperature(double temperature) {this.temperature = temperature;}
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (level.isClientSide) return InteractionResult.PASS;
@@ -49,7 +48,6 @@ public class GasAnalyzer extends Item {
         List<Entity> entities = level.getEntities(player, rayAABB, entity -> entity instanceof turf_tile);
         EntityHitResult closestHit = null;
         double closestDistance = Double.MAX_VALUE;
-
         for (Entity entity : entities) {
             AABB entityAABB = entity.getBoundingBox();
             Optional<Vec3> intersection = entityAABB.clip(start, end); // Check if the ray hits the entity
@@ -67,8 +65,8 @@ public class GasAnalyzer extends Item {
             Entity hitEntity = closestHit.getEntity();
 
             if (hitEntity instanceof turf_tile tile) {
+                //All the code for interacting with the tile itself. Everything above is just prerequisite to fetch the tile we're targetting
                 scanTile(tile, (ServerPlayer) player);
-                return InteractionResult.SUCCESS;
             }
         }
         return InteractionResult.PASS;

@@ -26,19 +26,19 @@ public record GasAnaPacket(double temperature) implements CustomPacketPayload {
         return TYPE;
     }
 
-    public class ClientPayloadHandler {
+    public static class ClientPayloadHandler {
         public static void handleDataOnNetwork(final GasAnaPacket data, final IPayloadContext context) {
             //not needed as of yet
         }
     }
-    public class ServerPayloadHandler {
+    public static class ServerPayloadHandler {
         public static void handleDataOnNetwork(final GasAnaPacket data, final IPayloadContext context) {
             context.enqueueWork(() -> {
-                    ServerPlayer player = (ServerPlayer) context.player();
+                ServerPlayer player = (ServerPlayer) context.player();
                 ItemStack stack = player.getMainHandItem();
                 //Which should always be the case since GasAnaPacket is specifically designed to be for gas analyzers only. Albeit, I should probably rearrange this. Later.
                 if (stack.getItem() instanceof GasAnalyzer gasAnalyzer) {
-//                    gasAnalyzer.setTemperature(data.temperature);
+                    gasAnalyzer.setTemperature(data.temperature);
                 }
             });
         }
