@@ -16,11 +16,13 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static bluedazzled.lucy_atmos.lucy_atmos.MODID;
+
 @ParametersAreNonnullByDefault
 public class markiplier extends Block {
     public markiplier() {
         super(BlockBehaviour.Properties.of()
-                .setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("mas", "markiplier")))
+                .setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(MODID, "markiplier")))
                 .strength(3.5F)
                 .sound(SoundType.METAL));
 
